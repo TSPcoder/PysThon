@@ -67,5 +67,3 @@ class Window:
         #print("ajouter une contrainte")
         ConstraintCreation()
 
-
-w = Window()
