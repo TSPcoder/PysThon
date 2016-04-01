@@ -99,7 +99,7 @@ class Solver :
         m = len(self.tabUsed[n])
 
         while i < n and outPut == True :
-            outPut= self.tabUsed[n][i] <= 0
+            outPut = self.tabUsed[n][i] <= 0
             i += 1
 
         return outPut

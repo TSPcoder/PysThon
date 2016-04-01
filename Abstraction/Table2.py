@@ -1,4 +1,5 @@
 from __future__ import division
+import matplotlib.pyplot as plt
 # -*-coding:utf-8 -*
 
 from Abstraction.Constraint import *
@@ -7,10 +8,9 @@ class Table2 :
 
     # constructor & special methods
 
-
     def __init__(self, *tuple):
-        self.tab=list(tuple)
-
+        self.tab = list(tuple)
+        self.constraints = []
 
     def __getitem__(self, item):
         return self.tab[item]
@@ -20,7 +20,6 @@ class Table2 :
 
     def __str__(self):
         return "{}".format(self.tab)
-
 
     # print method
 
@@ -33,6 +32,28 @@ class Table2 :
             print(i, ' '.join(str(element)))
 
     # method to do line i = alpha * line i - beta * line j
+
+    def print_graph(self):
+        f = plt.figure(1)
+        plt.title("Interprétation géométrique du simplex")
+        plt.axis([0, 5, 0, 5])
+        plt.xlabel('x1')
+        plt.ylabel('x2')
+        for c in self.constraints:
+            t = c.normalize()
+            a1 = t[0]
+            a2 = t[1]
+            b = t[2]
+            if a1 == 0:
+                # x2 = b/a2
+                plt.plot([0, 5], [b/a2, b/a2])
+            elif a2 == 0:
+                # x1 = b/a1
+                plt.plot([b/a1, b/a1],[0, 5])
+            else:
+                plt.plot([0, 5], [b/a2, b/a2 - (a1/a2) * 5])
+            plt.hold(True)
+        plt.show()
 
     def op(self,alpha,beta,i,j):
         li,lj = self.tab[i],self.tab[j]
@@ -47,13 +68,13 @@ class Table2 :
 
     # method to add a constraint
 
-    def addConstraintStepOne(self,a):
+    def addConstraintStepOne(self, a):
+        self.constraints.append(a)
         b = a.normalize()
         useless = b.pop()
         del useless
         b.insert(len(b)-1,1)
         self.tab.append(b)
-
 
     # method to "normalize" a table ( add variables )
 
@@ -166,25 +187,4 @@ class Table2 :
                 print("x1 = ",self[checkValues[3][p-1]])
                 print("x2 = ",self[checkValues[1][p-1]])
 
-
         return -self.tab[n-1][p-1]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

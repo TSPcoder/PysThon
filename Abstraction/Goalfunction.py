@@ -24,19 +24,14 @@ class GoalFunction:
     # e.g , with the example above , normalize returns [3,4,5,True]
 
     def normalize(self):
-        output= []
+        output = []
         temp = self.coFunction
-        if self.minOrMax == True :
-            for elt in temp :
+        if self.minOrMax:
+            for elt in temp:
                 output.append(elt)
-
-
-
-        else :
+        else:
             for elt in temp :
                 output.append(-elt)
-
-
         output.append(0)
 
         return output
