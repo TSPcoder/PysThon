@@ -1,6 +1,5 @@
 # Author : Aymeric ALOUGES
 
-from Presentation.ConstraintCreation import *
 from Presentation.Graph import *
 
 # Creation of our window
@@ -13,6 +12,7 @@ class Window(Frame):
 
         self.configure(width=width, height=height)
         self.width, self.height = width, height
+        self.constraints = []
 
         # Top of the GUI
         self.FrameTop = Frame(self, borderwidth=0, relief=GROOVE)
@@ -52,7 +52,7 @@ class Window(Frame):
         Button(FrameButtons, text='Lancer la résolution').pack(side="bottom", padx=5, pady=5)
         Button(FrameButtons, text='Fonction objectif').pack(side="bottom", padx=5, pady=5)
         b = Button(FrameButtons, text='Ajouter une Contrainte')
-        #b.bind('<Button-1>', self.master.addConstraint)
+        b.bind('<Button-1>', self.buttonConstraint)
         b.pack(side="bottom", padx=5, pady=5)
 
         FrameButtons.pack(side="left", padx=0, pady=0)
@@ -77,7 +77,11 @@ class Window(Frame):
         # Tkinter loop
         #self.win.mainloop()
 
-    def addConstraint(self, event):
-        #print("ajouter une contrainte")
+
+    def addConstraint(self, constraint):
+        self.constraints.append(constraint)
+
+    def buttonConstraint(self, event):
         ConstraintCreation()
 
+from Presentation.ConstraintCreation import *
