@@ -8,12 +8,20 @@ class Graph(Canvas):
   "Canevas that build the geometric aspect of the problem"
   def __init__(self, boss =None, width=200, height=150):
     #build the axis
-    Canvas.__init__(self)		  # constructor
-    self.configure(width=width, height=height)	      # de la classe parente
-    self.width, self.height = width, height 	     # mémorisation
+
+    # constructor
+    Canvas.__init__(self)
+
+    # de la classe parente
+    self.configure(width=width, height=height, bg='white')
+
+    # mémorisation
+    self.width, self.height = width, height
     # tracé des axes de référence :
-    self.create_line(10, height-5, width-10, height-5, arrow=LAST)  # axe X
-    self.create_line(10, height-5, 10, 5, arrow=LAST)	       # axe Y
+    # axe X
+    self.create_line(10, height-5, width-10, height-5, arrow=LAST)
+    # axe Y
+    self.create_line(10, height-5, 10, 5, arrow=LAST)
     # tracé d'une échelle avec 8 graduations :
     step_x = (width-25)/8.      # intervalles de l'échelle horizontale
     for t in range(1, 9):

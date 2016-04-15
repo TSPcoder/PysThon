@@ -8,7 +8,6 @@ from Abstraction.Constraint import *
 
 class Tab:
 
-
     def __init__(self, *tuple):
         self.tab=list(tuple)
 

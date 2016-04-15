@@ -18,8 +18,7 @@ class Constraint :
         self.coeffsConstraint = myCoeffs
         self.operatorConstraint = myOperator
 
-    @property
-    def __repr__(self):
+    def toString(self):
         return "{}*x1 + {}*x2 {} {}".format(self.coeffsConstraint[0], self.coeffsConstraint[1],
                                             self.operatorConstraint, self.coeffsConstraint[2])
 

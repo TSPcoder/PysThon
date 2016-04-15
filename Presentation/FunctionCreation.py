@@ -8,9 +8,9 @@ from Abstraction.Goalfunction import *
 
 class FunctionCreation:
 
-    def __init__(self):
+    def __init__(self, win):
         self.window = Tk()
-        self.win = Window()
+        self.win = win
 
         Label(self.window, text = 'Fonction objectif').grid(row =1, column =1, columnspan =2, padx =10, pady =5)
 

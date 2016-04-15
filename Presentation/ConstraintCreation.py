@@ -1,12 +1,11 @@
-from tkinter import *
-from Presentation.Window import Window
 from Abstraction.Constraint import *
+from Presentation.Window import *
 
 
-class ConstraintCreation():
-    def __init__(self):
+class ConstraintCreation:
+    def __init__(self, win):
         self.window = Tk()
-        self.win = Window()
+        self.win = win
 
         Label(self.window, text='Nouvelle Contrainte').grid(row=1, column=1, columnspan=2, padx=10, pady=5)
         name = StringVar()
@@ -47,7 +46,28 @@ class ConstraintCreation():
         # Tkinter loop
         self.window.mainloop()
 
+    @property
+    def getCoefs(self):
+        return [self.c1.get(), self.c2.get(), self.cst.get()]
+
+    @property
+    def getOp(self):
+        return self.op.get()
+
     def validate(self, event):
-        c = Constraint([self.c1.get(), self.c2.get(), self.cst.get()], self.op.get())
-        # print(self.nom.get(), " : x1 * ", self.c1.get(), " x2 * ", self.c2.get(), " ", self.op.get(), " ", self.cst.get())
-        self.win.addConstraint(c)
+        if type(self.c1.get()) == "":
+            # message d'alerte : c1 mal saisi
+            print("c1 est mal saisi")
+        elif type(self.c2.get()) == "":
+            # message d'alerte : c2 est mal saisi
+            print("c2 esl mal saisi")
+        elif type(self.op.get()) == "":
+            # message d'alerte : op est mal saisi
+            print("op est mal saisi")
+        elif type(self.cst.get()) == "":
+            # message d'alerte : cst est mal saisi
+            print("cst est mal saisi")
+        else:
+            c = Constraint([self.c1.get(), self.c2.get(), self.cst.get()], self.op.get())
+            # print(self.nom.get(), " : x1 * ", self.c1.get(), " x2 * ", self.c2.get(), " ", self.op.get(), " ", self.cst.get())
+            self.win.addConstraint(c)
