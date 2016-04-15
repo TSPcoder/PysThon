@@ -48,6 +48,6 @@ class ConstraintCreation():
         self.window.mainloop()
 
     def validate(self, event):
-        c = Constraint([self.c1, self.c2, self.cst], self.op)
+        c = Constraint([self.c1.get(), self.c2.get(), self.cst.get()], self.op.get())
         # print(self.nom.get(), " : x1 * ", self.c1.get(), " x2 * ", self.c2.get(), " ", self.op.get(), " ", self.cst.get())
         self.win.addConstraint(c)

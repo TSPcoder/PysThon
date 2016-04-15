@@ -1,37 +1,50 @@
 # Autor : Aymeric ALOUGES
-import string
+
 from tkinter import *
+from Presentation.Window import *
+from Abstraction.Goalfunction import *
 
 #Creation of our window
 
-window = Tk()
+class FunctionCreation:
 
-Label(window, text = 'Nouvelle Contrainte').grid(row =1, column =1, columnspan =2, padx =10, pady =5)
-nom = StringVar()
-nom.set("Nom de la contrainte")
-Entry(window, textvariable=nom, width=30).grid(row =2, column =1, columnspan =2, padx =10, pady =5)
+    def __init__(self):
+        self.window = Tk()
+        self.win = Window()
 
-Label(window, text = 'Coéficient de x1').grid(row =3, column =1, padx =10, pady =5,stick = E)
-coef1 = StringVar()
-coef1.set("")
-Entry(window, width=10).grid(row =3, column =2, padx =10, pady =5)
+        Label(self.window, text = 'Fonction objectif').grid(row =1, column =1, columnspan =2, padx =10, pady =5)
 
-Label(window, text = 'Coéficient de x2').grid(row =4, column =1, padx =10, pady =5,stick = E)
-coef2 = StringVar()
-coef2.set("")
-Entry(window, width=10).grid(row =4, column =2, padx =10, pady =5)
+        Label(self.window, text = 'Coéficient de x1').grid(row =2, column =1, padx =10, pady =5,stick = E)
+        coef1 = StringVar()
+        coef1.set("")
+        self.c1 = Entry(self.window, textvariable=coef1,width=10)
+        self.c1.grid(row =2, column =2, padx =10, pady =5)
 
-Label(window, text = 'opérateur').grid(row =5, column =1, padx =10, pady =5,stick = E)
-operator = StringVar()
-operator.set("")
-Entry(window, width=10).grid(row =5, column =2, padx =10, pady =5)
+        Label(self.window, text = 'Coéficient de x2').grid(row =3, column =1, padx =10, pady =5,stick = E)
+        coef2 = StringVar()
+        coef2.set("")
+        self.c2 = Entry(self.window, textvariable=coef2,width=10)
+        self.c2.grid(row =3, column =2, padx =10, pady =5)
 
-Label(window, text = 'constante').grid(row =6, column =1, padx =10, pady =5,stick = E)
-constant = StringVar()
-constant.set("")
-Entry(window, width=10).grid(row =6, column =2, padx =10, pady =5)
+        Label(self.window, text = 'opérateur').grid(row =4, column =1, padx =10, pady =5,stick = E)
+        operator = StringVar()
+        operator.set("")
+        self.op = Entry(self.window, textvariable=operator,width=10)
+        self.op.grid(row =4, column =2, padx =10, pady =5)
 
-Button(window, text ='Valider').grid(row =7, column =1, padx =10, pady =5)
-Button(window, text ='Annuler').grid(row =7, column =2, padx =10, pady =5)
-# Tkinter loop
-window.mainloop()
+        Label(self.window, text = 'constante').grid(row =5, column =1, padx =10, pady =5,stick = E)
+        constant = StringVar()
+        constant.set("")
+        self.cst = Entry(self.window, textvariable=constant,width=10)
+        self.cst.grid(row =5, column =2, padx =10, pady =5)
+
+        v = Button(self.window, text ='Valider')
+        v.grid(row =6, column =1, padx =10, pady =5)
+        v.bind()
+        Button(self.window, text ='Annuler').grid(row =6, column =2, padx =10, pady =5)
+        # Tkinter loop
+        self.window.mainloop()
+
+    def validate(self, event):
+        gf = GoalFunction([self.c1.get(), self.c2.get(), self.cst.get()],self.op.get())
+        self.win.setGF(gf)

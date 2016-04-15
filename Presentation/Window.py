@@ -13,6 +13,7 @@ class Window(Frame):
         self.configure(width=width, height=height)
         self.width, self.height = width, height
         self.constraints = []
+        self.gf = None
 
         # Top of the GUI
         self.FrameTop = Frame(self, borderwidth=0, relief=GROOVE)
@@ -50,7 +51,9 @@ class Window(Frame):
 
         FrameButtons = Frame(self.FrameBottom, borderwidth=0, relief=GROOVE)
         Button(FrameButtons, text='Lancer la résolution').pack(side="bottom", padx=5, pady=5)
-        Button(FrameButtons, text='Fonction objectif').pack(side="bottom", padx=5, pady=5)
+        f = Button(FrameButtons, text='Fonction objectif')
+        f.bind('<Button-1>', self.buttonGF)
+        f.pack(side="bottom", padx=5, pady=5)
         b = Button(FrameButtons, text='Ajouter une Contrainte')
         b.bind('<Button-1>', self.buttonConstraint)
         b.pack(side="bottom", padx=5, pady=5)
@@ -81,7 +84,15 @@ class Window(Frame):
     def addConstraint(self, constraint):
         self.constraints.append(constraint)
 
+    def setGF(self, gf):
+        self.gf = gf
+
     def buttonConstraint(self, event):
         ConstraintCreation()
 
+    def buttonGF(self, event):
+        FunctionCreation()
+        print("GF")
+
 from Presentation.ConstraintCreation import *
+from Presentation.FunctionCreation import *

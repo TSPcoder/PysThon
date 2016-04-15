@@ -16,7 +16,7 @@ class GoalFunction:
 
 
     # CONSTRUCTOR
-    def __init__(self,myCoeffs=[0,0,0],myMinOrMax=True):
+    def __init__(self, myCoeffs=[0,0,0], myMinOrMax=True):
         self.coFunction=myCoeffs
         self.minOrMax=myMinOrMax
 
