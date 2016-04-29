@@ -8,9 +8,9 @@ class Table2 :
 
     # constructor & special methods
 
-    def __init__(self, *tuple):
+    def __init__(self, *tuple,gf):
         self.tab = list(tuple)
-        self.constraints = []
+        self.tab.append(gf)
 
     def __getitem__(self, item):
         return self.tab[item]
@@ -39,7 +39,7 @@ class Table2 :
         plt.axis([0, 5, 0, 5])
         plt.xlabel('x1')
         plt.ylabel('x2')
-        for c in self.constraints:
+        for c in self.tab[len(self.tab)]:
             t = c.normalize()
             a1 = t[0]
             a2 = t[1]
@@ -69,7 +69,7 @@ class Table2 :
     # method to add a constraint
 
     def addConstraintStepOne(self, a):
-        self.constraints.append(a)
+        self.tab.append(a)
         b = a.normalize()
         useless = b.pop()
         del useless
