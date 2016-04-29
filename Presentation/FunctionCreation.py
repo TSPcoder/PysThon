@@ -40,11 +40,45 @@ class FunctionCreation:
 
         v = Button(self.window, text ='Valider')
         v.grid(row =6, column =1, padx =10, pady =5)
-        v.bind()
-        Button(self.window, text ='Annuler').grid(row =6, column =2, padx =10, pady =5)
+        v.bind('<Button-1>', self.validate)
+        Button(self.window, text ='Annuler', command=self.window.destroy).grid(row =6, column =2, padx =10, pady =5)
         # Tkinter loop
         self.window.mainloop()
 
+    def str_to_int(self, a):
+        try:
+            return int(a)
+        except:
+            print("l'argument n'est pas du bon type")
+            return a
+
+    def str_to_float(self, a):
+        try:
+            return float(a)
+        except:
+            print("l'argument n'est pas du bon type")
+            return a
+
     def validate(self, event):
-        gf = GoalFunction([self.c1.get(), self.c2.get(), self.cst.get()],self.op.get())
-        self.win.setGF(gf)
+        temp = self.op.get()
+        if type(self.str_to_int(self.c1.get())) != int:
+            # message d'alerte : c1 mal saisi
+            showwarning('Attention !', 'Le premier coefficient est mal saisi.')
+            print("c1 est mal saisi")
+        elif type(self.str_to_int(self.c2.get())) != int:
+            # message d'alerte : c2 est mal saisi
+            showwarning('Attention !', 'Le deuxième coefficient est mal saisi.')
+            print("c2 esl mal saisi")
+        elif temp != "min" and temp != "max":
+            # message d'alerte : op est mal saisi
+            showwarning('Attention !', "L'opérateur est mal saisi.")
+            print("op est mal saisi")
+        elif type(self.str_to_int(self.cst.get())) != int:
+            # message d'alerte : cst est mal saisi
+            showwarning('Attention !', 'La constante est mal saisie.')
+            print("cst est mal saisi")
+        else:
+            gf = GoalFunction([self.str_to_int(self.c1.get()), self.str_to_float(self.c2.get()), self.str_to_float(self.cst.get())]
+                              ,self.op.get())
+            self.win.setGF(gf)
+            self.window.destroy()

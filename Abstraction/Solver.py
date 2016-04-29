@@ -71,3 +71,6 @@ class Solver:
         print("The max value is : ",-self.tab[n-1][p-1])
         return -self.tab[n-1][p-1]
 
+
+    def solve(self):
+        self.simplex()

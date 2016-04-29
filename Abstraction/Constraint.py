@@ -14,7 +14,7 @@ class Constraint :
 
     """
 
-    def __init__(self, myCoeffs = [1,1,1], myOperator = "<"):
+    def __init__(self, myCoeffs = [1,1,1], myOperator = "<="):
         self.coeffsConstraint = myCoeffs
         self.operatorConstraint = myOperator
 
@@ -25,20 +25,12 @@ class Constraint :
     def normalize(self):
         outPut = []
         temp = self.coeffsConstraint
-        if self.operatorConstraint == "<=" or self.operatorConstraint == "<" or self.operatorConstraint == "=":
-            for elt in temp :
+        if self.operatorConstraint == "<=" or self.operatorConstraint == "=":
+            for elt in temp:
                 outPut.append(elt)
 
-            if self.operatorConstraint == "=":
-                outPut.append(False)
-
-            else:
-                outPut.append(True)
-
-
         else:
-            if self.operatorConstraint == ">=" or self.operatorConstraint == ">":
+            if self.operatorConstraint == ">=":
                 for elt in temp :
                     outPut.append(-elt)
-            outPut.append(True)
         return outPut

@@ -48,7 +48,7 @@ class Window(Frame):
         FrameTable = LabelFrame(self, borderwidth=0, relief=GROOVE, text="Tableau")
         for ligne in range(5):
             for colonne in range(5):
-                Label(FrameTable, text='L%s-C%s' % (ligne, colonne), relief=GROOVE, borderwidth=5).grid(row=ligne,
+                Label(FrameTable, text='L%s-C%s' % (ligne, colonne), relief=RIDGE, borderwidth=5).grid(row=ligne,
                                                                                                         column=colonne)
         FrameTable.pack(side="bottom", padx=5, pady=5)
 
@@ -87,12 +87,20 @@ class Window(Frame):
 
     def addConstraint(self, constraint):
         print(constraint.toString())
-        self.constraints.append(constraint)
-        n = len(self.constraints)
-        self.listConstraints.insert(n,constraint.toString())
+        n = len(self.constraints) + 1
+        self.listConstraints.insert(n, constraint.toString())
+        if constraint.operatorConstraint == '=':
+            constraint1 = Constraint(constraint.coeffsConstraint, '<=').normalize()
+            constraint2 = Constraint(constraint.coeffsConstraint, '>=').normalize()
+            self.constraints.append(constraint1)
+            self.constraints.append(constraint2)
+        else:
+            constraint = constraint.normalize()
+            self.constraints.append(constraint)
+
 
     def setGF(self, gf):
-        self.gf = gf
+        self.gf = gf.normalize()
 
     def buttonConstraint(self, event):
         ConstraintCreation(self)
@@ -102,9 +110,9 @@ class Window(Frame):
         # print("GF")
 
     def solve(self, event):
-        table = TableFinale(self.constraints, self.gf)
-        self.solver = Solver(table)
-        self.solver.simplex()
+        self.table = TableFinale(self.constraints, self.gf)
+        self.solver = Solver(self.table)
+        self.solver.solve()
 
 
 from Presentation.ConstraintCreation import *

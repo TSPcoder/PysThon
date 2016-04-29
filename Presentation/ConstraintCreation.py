@@ -1,11 +1,13 @@
 from Abstraction.Constraint import *
 from Presentation.Window import *
+from tkinter.messagebox import *
 
 
 class ConstraintCreation:
     def __init__(self, win):
         self.window = Tk()
         self.win = win
+        self.ops = ['<=', '=', '>=']
 
         Label(self.window, text='Nouvelle Contrainte').grid(row=1, column=1, columnspan=2, padx=10, pady=5)
         name = StringVar()
@@ -41,7 +43,7 @@ class ConstraintCreation:
         valider.grid(row=7, column=1, padx=10, pady=5)
         valider.bind('<Button-1>', self.validate)
 
-        Button(self.window, text='Annuler', command=self.window.quit).grid(row=7, column=2, padx=10, pady=5)
+        Button(self.window, text='Annuler', command=self.window.destroy).grid(row=7, column=2, padx=10, pady=5)
 
         # Tkinter loop
         self.window.mainloop()
@@ -54,20 +56,41 @@ class ConstraintCreation:
     def getOp(self):
         return self.op.get()
 
+    def str_to_int(self, a):
+        try:
+            return int(a)
+        except:
+            print("l'argument n'est pas du bon type")
+            return a
+
+    def str_to_float(self, a):
+        try:
+            return float(a)
+        except:
+            print("l'argument n'est pas du bon type")
+            return a
+
     def validate(self, event):
-        if type(self.c1.get()) == "":
+        temp = self.op.get()
+        if type(self.str_to_int(self.c1.get())) != int:
             # message d'alerte : c1 mal saisi
+            showwarning('Attention !', 'Le premier coefficient est mal saisi.')
             print("c1 est mal saisi")
-        elif type(self.c2.get()) == "":
+        elif type(self.str_to_int(self.c2.get())) != int:
             # message d'alerte : c2 est mal saisi
+            showwarning('Attention !', 'Le deuxième coefficient est mal saisi.')
             print("c2 esl mal saisi")
-        elif type(self.op.get()) == "":
+        elif temp != "<=" and temp != "=" and temp != ">=":
             # message d'alerte : op est mal saisi
+            showwarning('Attention !', "L'opérateur est mal saisi.")
             print("op est mal saisi")
-        elif type(self.cst.get()) == "":
+        elif type(self.str_to_int(self.cst.get())) != int:
             # message d'alerte : cst est mal saisi
+            showwarning('Attention !', 'La constante est mal saisie.')
             print("cst est mal saisi")
         else:
-            c = Constraint([self.c1.get(), self.c2.get(), self.cst.get()], self.op.get())
+            c = Constraint([self.str_to_float(self.c1.get()), self.str_to_float(self.c2.get()), self.str_to_float(self.cst.get())]
+                           , self.op.get())
             # print(self.nom.get(), " : x1 * ", self.c1.get(), " x2 * ", self.c2.get(), " ", self.op.get(), " ", self.cst.get())
             self.win.addConstraint(c)
+            self.window.destroy()

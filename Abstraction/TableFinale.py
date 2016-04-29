@@ -68,7 +68,7 @@ class TableFinale:
             m = len(self.tab[n-1])
 
             while i < m and outPut == True :
-                outPut= self.tab[n-1][i] <= 0
+                outPut=self.tab[n-1][i] <= 0
                 i += 1
 
             return outPut
