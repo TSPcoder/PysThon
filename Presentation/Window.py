@@ -21,11 +21,14 @@ class Window(Frame):
         self.gf = None
         self.solver = None
 
-        # Top of the GUI
-        self.FrameTop = Frame(self, borderwidth=0, relief=GROOVE)
-        self.FrameTop.pack(side="top")
+        # Left of the GUI
+        self.FrameLeft = Frame(self, borderwidth=0, relief=GROOVE)
+        self.FrameLeft.pack(side="left")
 
-        FrameModification = Labelframe(self.FrameTop, borderwidth=0, relief=GROOVE,
+        FrameTop = Frame(self.FrameLeft, borderwidth=0, relief=GROOVE)
+        FrameTop.pack(side="top")
+
+        FrameModification = Labelframe(FrameTop, borderwidth=0, relief=GROOVE,
                                        text="Modification de la Contrainte")
         Label(FrameModification, text='Nom de la contrainte').grid(row=1, column=1, columnspan=2, padx=10, pady=5)
         Label(FrameModification, text='Affichage constrainte').grid(row=2, column=1, columnspan=2, padx=10, pady=5)
@@ -39,22 +42,9 @@ class Window(Frame):
         Button(FrameModification, text='Supprimer').grid(row=7, column=1, columnspan=2, padx=10, pady=5)
         FrameModification.pack(side="left", padx=5, pady=5)
 
-        # CanvasGraph = Canvas(self.FrameTop, width =200, height =150, bg="blue")
-        # CanvasGraph.pack(side = "left")
-        Graphic = Graph(self.FrameTop, width=1000, height=750)
-        Graphic.pack(side="right", padx=5, pady=5)
-
-        # Graphic.traceCourbe()
-        FrameTable = LabelFrame(self, borderwidth=0, relief=GROOVE, text="Tableau")
-        for ligne in range(5):
-            for colonne in range(5):
-                Label(FrameTable, text='L%s-C%s' % (ligne, colonne), relief=RIDGE, borderwidth=5).grid(row=ligne,
-                                                                                                        column=colonne)
-        FrameTable.pack(side="bottom", padx=5, pady=5)
-
         # Bottom of the GUI
-        self.FrameBottom = Frame(self, borderwidth=0, relief=GROOVE)
-        self.FrameBottom.pack(side="bottom")
+        self.FrameBottom = Frame(self.FrameLeft, borderwidth=0, relief=GROOVE)
+        self.FrameBottom.pack(side="top")
 
         FrameButtons = Frame(self.FrameBottom, borderwidth=0, relief=GROOVE)
         solve = Button(FrameButtons, text='Lancer la résolution')
@@ -76,10 +66,45 @@ class Window(Frame):
         self.listConstraints.pack()
         FrameConstraints.pack(side="left", padx=5, pady=5)
 
-        FrameResults = Labelframe(self.FrameBottom, borderwidth=0, relief=GROOVE, text="Résultat")
+        FrameResults = Labelframe(self.FrameLeft, borderwidth=0, relief=GROOVE, text="Résultat")
         labelResults = Label(FrameResults, text="Résultats", bg="white")
         labelResults.pack()
-        FrameResults.pack(side="left", padx=5, pady=5)
+        FrameResults.pack(side="top", padx=5, pady=5)
+
+
+
+        FrameTable = LabelFrame(self.FrameLeft, borderwidth=0, relief=GROOVE, text="Tableau")
+        for ligne in range(5):
+            for colonne in range(5):
+                Label(FrameTable, text='L%s-C%s' % (ligne, colonne), relief=GROOVE, borderwidth=5).grid(row=ligne,
+                                                                                                        column=colonne)
+        FrameTable.pack(side="top", padx=5, pady=5)
+
+        #Right of the GUI
+
+        self.FrameRight = Frame(self, borderwidth=0, relief=GROOVE)
+        self.FrameRight.pack(side="right")
+
+        CanvasGraph = Canvas(self.FrameRight, width =self.width*0.66, height =self.height, bg="blue")
+        CanvasGraph.pack(side = "right")
+
+        # Generate some example data
+        X = np.linspace(0, 2.0*3.14, 50)
+        Y = np.sin(X)
+
+        # Create the figure we desire to add to an existing canvas
+        fig = mpl.figure.Figure(figsize=(16, 8))
+        ax = fig.add_axes([0, 0, 1, 1])
+        ax.plot(X, Y)
+
+        # Keep this handle alive, or else figure will disappear
+        fig_x, fig_y = 100, 100
+        fig_photo = draw_figure(CanvasGraph, fig, loc=(fig_x, fig_y))
+        fig_w, fig_h = fig_photo.width(), fig_photo.height()
+
+        #draw_figure(CanvasGraph, figure, loc=(0, 0))
+        #Graphic = Graph(self.FrameTop, width=1000, height=750)
+        #Graphic.pack(side="right", padx=5, pady=5)
 
         self.pack()
         # Tkinter loop
@@ -87,20 +112,12 @@ class Window(Frame):
 
     def addConstraint(self, constraint):
         print(constraint.toString())
-        n = len(self.constraints) + 1
-        self.listConstraints.insert(n, constraint.toString())
-        if constraint.operatorConstraint == '=':
-            constraint1 = Constraint(constraint.coeffsConstraint, '<=').normalize()
-            constraint2 = Constraint(constraint.coeffsConstraint, '>=').normalize()
-            self.constraints.append(constraint1)
-            self.constraints.append(constraint2)
-        else:
-            constraint = constraint.normalize()
-            self.constraints.append(constraint)
-
+        self.constraints.append(constraint)
+        n = len(self.constraints)
+        self.listConstraints.insert(n,constraint.toString())
 
     def setGF(self, gf):
-        self.gf = gf.normalize()
+        self.gf = gf
 
     def buttonConstraint(self, event):
         ConstraintCreation(self)
@@ -110,9 +127,9 @@ class Window(Frame):
         # print("GF")
 
     def solve(self, event):
-        self.table = TableFinale(self.constraints, self.gf)
-        self.solver = Solver(self.table)
-        self.solver.solve()
+        table = TableFinale(self.constraints, self.gf)
+        self.solver = Solver(table)
+        self.solver.simplex()
 
 
 from Presentation.ConstraintCreation import *
