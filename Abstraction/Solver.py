@@ -8,6 +8,26 @@ class Solver:
         """
         self.tab = table
 
+    def algo(self):
+        #----- premiere étape -----
+        # check de b
+        b = self.tab.get_second_membre()
+        cpt = 0
+        i = 0
+        temp = True
+        while i < len(b):
+            if(b[i] < 0):
+                cpt += 1
+                temp = False
+        if temp:
+            self.simplex()
+        else:
+            newTab = self.tab.copy()
+            newTab.normalize_deux_phases()
+
+
+
+
     def simplex(self):
         self.tab.normalize()
         n = self.tab.size()

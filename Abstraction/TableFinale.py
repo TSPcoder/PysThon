@@ -61,6 +61,23 @@ class TableFinale:
             for i in range(n-1):
                 self.tab[n-1].append(0)
 
+        def normalize_deux_phases(self):
+            cpt = 0
+            n = len(self.tab)
+            m = len(self.tab[0])
+            for i in range(n-1):
+                if self.tab[i][m-1] < 0:
+                    for j in range(cpt):
+                        self.tab[i].append(0)
+                    self.tab[i].append(1)
+                    if(i>0):
+                        for j in range(0,i-1):
+                            self.tab[j].append(0)
+                    cpt += 1
+                else:
+                    for j in range(cpt):
+                        self.tab[i].append(0)
+
         def allNeg(self):
             outPut = True
             i = 0
@@ -73,6 +90,16 @@ class TableFinale:
 
             return outPut
 
+        def get_second_membre(self):
+            res = []
+            i = 0
+            n = len(self.tab)
+            m = len(self.tab[0])
+            while i < m:
+                res.append(self.tab[i][m-1])
+            return res
+
+
         def op(self,alpha,beta,i,j):
             li,lj = self.tab[i],self.tab[j]
             ti,tj,nl = [],[],[]
@@ -84,6 +111,14 @@ class TableFinale:
                 nl.append(ti[elt] - tj[elt])
             self.tab[i]=nl
 
+        def copy(self):
+            res = []
+            for i in range(len(self.tab)):
+                temp = []
+                for j in range(len(self.tab[i])):
+                    temp.append(self.tab[i][j])
+                res.append(temp)
+            return res
 def main():
     a = [[1,1,4],[1,0,3],[0,1,2]]
     b = [300,100,0]
