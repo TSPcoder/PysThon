@@ -28,8 +28,7 @@ class Window(Frame):
         FrameTop = Frame(self.FrameLeft, borderwidth=0, relief=GROOVE)
         FrameTop.pack(side="top")
 
-        FrameModification = Labelframe(FrameTop, borderwidth=0, relief=GROOVE,
-                                       text="Modification de la Contrainte")
+        FrameModification = Labelframe(FrameTop, borderwidth=0, relief=GROOVE,text="Modification de la Contrainte")
         Label(FrameModification, text='Nom de la contrainte').grid(row=1, column=1, columnspan=2, padx=10, pady=5)
         Label(FrameModification, text='Affichage constrainte').grid(row=2, column=1, columnspan=2, padx=10, pady=5)
         Button(FrameModification, text='Modifier').grid(row=3, column=1, columnspan=2, padx=10, pady=5)
