@@ -20,6 +20,7 @@ class Window(Frame):
         self.constraints = []
         self.gf = None
         self.solver = None
+        self.table = None
 
         # Left of the GUI
         self.FrameLeft = Frame(self, borderwidth=0, relief=GROOVE)
@@ -111,12 +112,19 @@ class Window(Frame):
 
     def addConstraint(self, constraint):
         print(constraint.toString())
-        self.constraints.append(constraint)
-        n = len(self.constraints)
-        self.listConstraints.insert(n,constraint.toString())
+        n = len(self.constraints) + 1
+        self.listConstraints.insert(n, constraint.toString())
+        if constraint.operatorConstraint == '=':
+            constraint1 = Constraint(constraint.coeffsConstraint, '<=').normalize()
+            constraint2 = Constraint(constraint.coeffsConstraint, '>=').normalize()
+            self.constraints.append(constraint1)
+            self.constraints.append(constraint2)
+        else:
+            constraint = constraint.normalize()
+            self.constraints.append(constraint)
 
     def setGF(self, gf):
-        self.gf = gf
+        self.gf = gf.normalize()
 
     def buttonConstraint(self, event):
         ConstraintCreation(self)
@@ -126,9 +134,9 @@ class Window(Frame):
         # print("GF")
 
     def solve(self, event):
-        table = TableFinale(self.constraints, self.gf)
-        self.solver = Solver(table)
-        self.solver.simplex()
+        self.table = TableFinale(self.constraints, self.gf)
+        self.solver = Solver(self.table)
+        self.solver.solve()
 
 
 from Presentation.ConstraintCreation import *
