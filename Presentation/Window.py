@@ -96,7 +96,7 @@ class Window(Frame):
 
     def graph(self):
         fig = mpl.figure.Figure()
-        self.CanvasGraph.draw_constraints(self.constraints,fig)
+        self.ax = self.CanvasGraph.draw_constraints(self.constraints, fig)
         fig.set_figheight(self.height/fig.dpi)
         fig.set_figwidth(self.width/fig.dpi)
         fig_x, fig_y = 0, 0

@@ -73,4 +73,35 @@ class Graph(Canvas):
         for c in constraints :
             table = c.intersection()
             ax.plot(table[0], table[1], table[2],table[3])
+        return ax
 
+'''
+# Create a canvas
+w, h = 300, 200
+window = tk.Tk()
+window.title("A figure in a canvas")
+canvas = tk.Canvas(window, width=w, height=h)
+canvas.pack()
+
+# Generate some example data
+X = np.linspace(0, 2.0*3.14, 50)
+Y = np.sin(X)
+
+# Create the figure we desire to add to an existing canvas
+fig = mpl.figure.Figure(figsize=(2, 1))
+ax = fig.add_axes([0, 0, 1, 1])
+ax.plot(X, Y)
+
+# Keep this handle alive, or else figure will disappear
+fig_x, fig_y = 100, 100
+fig_photo = draw_figure(canvas, fig, loc=(fig_x, fig_y))
+fig_w, fig_h = fig_photo.width(), fig_photo.height()
+
+# Add more elements to the canvas, potentially on top of the figure
+canvas.create_line(200, 50, fig_x + fig_w / 2, fig_y + fig_h / 2)
+canvas.create_text(200, 50, text="Zero-crossing", anchor="s")
+
+# Let Tk take over
+tk.mainloop()
+
+'''
