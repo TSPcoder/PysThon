@@ -34,7 +34,7 @@ class TableFinale:
 
 
         # normalisation of the constraints
-        # A COMPLETER
+
         def addZeros(self,i,nb):
             l = self.tab[i]
             n = len(l)
@@ -54,7 +54,7 @@ class TableFinale:
             # swap the ones
 
             for i in range(n-1):
-                self.tab[i][2],self.tab[i][len(self.tab[i])-1]= self.tab[i][len(self.tab[i])-1],self.tab[i][2]
+                self.tab[i][2],self.tab[i][len(self.tab[i])-1] = self.tab[i][len(self.tab[i])-1],self.tab[i][2]
                 self.tab[i][2],self.tab[i][i+2] = self.tab[i][i+2],self.tab[i][2]
             # add the zeros on gf
 
@@ -62,21 +62,22 @@ class TableFinale:
                 self.tab[n-1].append(0)
 
         def normalize_deux_phases(self):
+            self.normalize()
             cpt = 0
             n = len(self.tab)
             m = len(self.tab[0])
             for i in range(n-1):
                 if self.tab[i][m-1] < 0:
-                    for j in range(cpt):
-                        self.tab[i].append(0)
                     self.tab[i].append(1)
-                    if(i>0):
-                        for j in range(0,i-1):
-                            self.tab[j].append(0)
                     cpt += 1
                 else:
-                    for j in range(cpt):
-                        self.tab[i].append(0)
+                    self.tab[i].append(0)
+
+            for j in range(n-1):
+                for i in range(cpt-1):
+                    self.tab[j].append(0)
+
+
 
         def allNeg(self):
             outPut = True
@@ -84,7 +85,7 @@ class TableFinale:
             n = len(self.tab)
             m = len(self.tab[n-1])
 
-            while i < m and outPut == True :
+            while i < m and outPut:
                 outPut=self.tab[n-1][i] <= 0
                 i += 1
 
