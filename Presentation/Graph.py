@@ -1,8 +1,10 @@
 
-# Autor : Aymeric ALOUGES
+# Author : Aymeric ALOUGES
 
 from tkinter import *
 from Abstraction.Constraint import *
+import numpy as np
+import matplotlib as mpl
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -61,7 +63,6 @@ class Graph(Canvas):
         xmax = 0
         ymax = 0
         for c in constraints:
-            print(type(c))
             table = c.intersection()
             if table[1]>xmax :
                 xmax = table[1]

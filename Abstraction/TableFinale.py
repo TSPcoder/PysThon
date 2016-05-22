@@ -3,7 +3,7 @@ class TableFinale:
 
 
         def __init__(self, constraints, gf):
-            self.tab = constraints
+            self.tab = list(constraints)
             self.tab.append(gf)
 
         """

@@ -130,7 +130,7 @@ class Window(Frame):
         self.graph()
         self.table = TableFinale(self.constraints, self.gf)
         self.solver = Solver(self.table)
-       #self.solver.solve()
+        #self.solver.solve()
 
 
 from Presentation.ConstraintCreation import *
