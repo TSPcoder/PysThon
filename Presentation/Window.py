@@ -4,7 +4,7 @@ from Presentation.Graph import *
 from Abstraction.Solver import *
 from Abstraction.TableFinale import *
 from tkinter.ttk import Labelframe
-
+import matplotlib.pyplot as plt
 
 # Creation of our window
 
@@ -15,8 +15,9 @@ class Window(Frame):
         self.win = Tk()
         Frame.__init__(self)
 
+
         self.configure(width=width, height=height)
-        self.width, self.height = width, height
+        self.width, self.height = self.win.winfo_screenwidth(), self.win.winfo_screenheight()-80
         self.constraints = []
         self.gf = None
         self.solver = None
@@ -71,44 +72,36 @@ class Window(Frame):
         labelResults.pack()
         FrameResults.pack(side="top", padx=5, pady=5)
 
-
-
         FrameTable = LabelFrame(self.FrameLeft, borderwidth=0, relief=GROOVE, text="Tableau")
         for ligne in range(5):
             for colonne in range(5):
                 Label(FrameTable, text='L%s-C%s' % (ligne, colonne), relief=GROOVE, borderwidth=5).grid(row=ligne,
                                                                                                         column=colonne)
+
+        Button(FrameTable, text='Suivant').grid(row=1, column=1, padx=10, pady=2.5, stick=E)
+        Button(FrameTable, text='Précedent').grid(row=1, column=2, padx=10, pady=5, stick=W)
         FrameTable.pack(side="top", padx=5, pady=5)
 
         #Right of the GUI
 
         self.FrameRight = Frame(self, borderwidth=0, relief=GROOVE)
         self.FrameRight.pack(side="right")
-
-        CanvasGraph = Canvas(self.FrameRight, width =self.width*0.66, height =self.height, bg="blue")
-        CanvasGraph.pack(side = "right")
-
-        # Generate some example data
-        X = np.linspace(0, 2.0*3.14, 50)
-        Y = np.sin(X)
-
-        # Create the figure we desire to add to an existing canvas
-        fig = mpl.figure.Figure(figsize=(16, 8))
-        ax = fig.add_axes([0, 0, 1, 1])
-        ax.plot(X, Y)
-
-        # Keep this handle alive, or else figure will disappear
-        fig_x, fig_y = 100, 100
-        fig_photo = draw_figure(CanvasGraph, fig, loc=(fig_x, fig_y))
-        fig_w, fig_h = fig_photo.width(), fig_photo.height()
-
-        #draw_figure(CanvasGraph, figure, loc=(0, 0))
-        #Graphic = Graph(self.FrameTop, width=1000, height=750)
-        #Graphic.pack(side="right", padx=5, pady=5)
+        print(self.height)
+        self.CanvasGraph = Graph(self.FrameRight, width =self.width*0.8, height =self.height)
+        self.CanvasGraph.pack(side = "right")
 
         self.pack()
         # Tkinter loop
         self.win.mainloop()
+
+    def graph(self):
+        fig = mpl.figure.Figure()
+        self.CanvasGraph.draw_constraints(self.constraints,fig)
+        fig.set_figheight(self.height/fig.dpi)
+        fig.set_figwidth(self.width/fig.dpi)
+        fig_x, fig_y = 0, 0
+        fig_photo = self.CanvasGraph.draw_figure(fig, loc=(fig_x, fig_y))
+        fig_w, fig_h = fig_photo.width(), fig_photo.height()
 
     def addConstraint(self, constraint):
         print(constraint.toString())
@@ -120,7 +113,7 @@ class Window(Frame):
             self.constraints.append(constraint1)
             self.constraints.append(constraint2)
         else:
-            constraint = constraint.normalize()
+            #constraint = constraint.normalize()
             self.constraints.append(constraint)
 
     def setGF(self, gf):
@@ -134,9 +127,10 @@ class Window(Frame):
         # print("GF")
 
     def solve(self, event):
+        self.graph()
         self.table = TableFinale(self.constraints, self.gf)
         self.solver = Solver(self.table)
-        self.solver.solve()
+       #self.solver.solve()
 
 
 from Presentation.ConstraintCreation import *
