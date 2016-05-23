@@ -1,6 +1,6 @@
 from Presentation.Graph import *
 from Presentation.Window import *
-from Presentation.WindowBis import WindowBis
+from Presentation.Window import WindowBis
 
 win = WindowBis()
 '''haut = root.winfo_screenheight()

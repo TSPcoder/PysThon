@@ -1,108 +1,127 @@
-# Author : Aymeric ALOUGES
+import matplotlib as mpl
+import tkinter as tk
 
-from Presentation.Graph import *
-from Abstraction.Solver import *
-from Abstraction.TableFinale import *
-from tkinter.ttk import Labelframe
-import matplotlib.pyplot as plt
-import matplotlib
+from Abstraction.Constraint import Constraint
+from Abstraction.Solver import Solver
+from Abstraction.TableFinale import TableFinale
+from Presentation.ConstraintCreationWindow import ConstraintCreation
+from Presentation.FunctionCreationWindow import FunctionCreation
+from Presentation.GraphFrame import GraphFrame
 
-from matplotlib.figure import Figure
-
-from tkinter import ttk
-
-# Creation of our window
+mpl.use("TkAgg")
 
 
-class Window(Tk):
-    def __init__(self, *args, **kwargs):
-        Tk.__init__(self, *args, **kwargs)
+class WindowBis(tk.Tk):
+    def __init__(self):
+        """Builds the whole window with two main Frames, the left one contains buttons and the let one contains the graph"""
+        tk.Tk.__init__(self)
 
-        self.constraints = []
         self.gf = None
-        self.solver = None
-        self.table = None
+        self.constraints = []
 
-        # Left of the GUI
-        self.frameLeft = Frame(self, borderwidth=0, relief=GROOVE)
-        self.frameLeft.pack(side="left")
+        "Creating right frame"
+        self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
+        self.right_frame.pack(side = 'right')
 
-        frameTop = Frame(self.frameLeft, borderwidth=0, relief=GROOVE)
-        frameTop.pack(side="top")
+        "Creating left frame"
+        self.left_frame = tk.Frame(self)
+        self.build_left_frame()
+        self.left_frame.pack(side = 'left')
 
-        frameModification = Labelframe(frameTop, borderwidth=0, relief=GROOVE,text="Modification de la Contrainte")
-        Label(frameModification, text='Nom de la contrainte').grid(row=1, column=1, columnspan=2, padx=10, pady=5)
-        Label(frameModification, text='Affichage constrainte').grid(row=2, column=1, columnspan=2, padx=10, pady=5)
-        m = Button(frameModification, text='Modifier')
-        m.grid(row=3, column=1, columnspan=2, padx=10, pady=5)
-        m.bind('<Button-1>', self.buttonModifier)
-        Button(frameModification, text='Supprimer').grid(row=7, column=1, columnspan=2, padx=10, pady=5)
-        frameModification.pack(side="left", padx=5, pady=5)
-
-        # Bottom of the GUI
-        self.frameBottom = Frame(self.frameLeft, borderwidth=0, relief=GROOVE)
-        self.frameBottom.pack(side="top")
-
-        frameButtons = Frame(self.frameBottom, borderwidth=0, relief=GROOVE)
-        solve = Button(frameButtons, text='Lancer la résolution')
-        solve.pack(side="bottom", padx=5, pady=5)
-        solve.bind('<Button-1>', self.solve)
-
-        f = Button(frameButtons, text='Fonction objectif')
-        f.bind('<Button-1>', self.buttonGF)
-        f.pack(side="bottom", padx=5, pady=5)
-
-        b = Button(frameButtons, text='Ajouter une Contrainte')
-        b.pack(side="bottom", padx=5, pady=5)
-
-        frameButtons.pack(side="left", padx=0, pady=0)
-
-        frameConstraints = Labelframe(self.frameBottom, borderwidth=0, relief=GROOVE, text="Constraintes")
-        self.listConstraints = Listbox(frameConstraints)
-        self.listConstraints.pack()
-        frameConstraints.pack(side="left", padx=5, pady=5)
-
-        frameResults = Labelframe(self.frameLeft, borderwidth=0, relief=GROOVE, text="Résultat")
-        labelResults = Label(frameResults, text="Résultats", bg="white")
-        labelResults.pack()
-        frameResults.pack(side="top", padx=5, pady=5)
-
-        frameTable = LabelFrame(self.frameLeft, borderwidth=0, relief=GROOVE, text="Tableau")
-        for ligne in range(5):
-            for colonne in range(5):
-                Label(frameTable, text='L%s-C%s' % (ligne, colonne), relief=GROOVE, borderwidth=5).grid(row=ligne,
-                                                                                                        column=colonne)
-
-        frameTable.pack(side="top", padx=5, pady=5)
-
-        # Tkinter loop
         self.mainloop()
 
-    def graph(self):
-        xmax = 0
-        ymax = 0
-        for c in self.constraints:
-            print(type(c))
-            table = c.intersection()
-            if table[1]>xmax:
-                xmax = table[1]
-            if table[2]>ymax:
-                ymax = table[2]
-        plt.axis([0,xmax, 0, ymax])
-        for c in self.constraints:
-            coefs = c.coeffsConstraint
-            if coefs[0] != 0 and coefs[1] != 0:
-                plt.plot([0, xmax], [ymax, 0])
-            elif coefs[0] == 0 and coefs[1] != 0:
-                plt.plot([0, xmax],[coefs[2]/coefs[1], coefs[2]/coefs[1]])
-            elif coefs[0] != 0 and coefs[1] == 0:
-                plt.plot([coefs[2]/coefs[0],coefs[2]/coefs[0]], [0,ymax])
-        plt.show()
+    def set_gf(self, gf):
+        self.gf = gf
 
-    def addConstraint(self, constraint):
+    "---------------Main Frames---------------------------------------------------------"
+
+    def build_left_frame(self):
+        "Builds the left frame at initialization"
+
+        "Problem setting frame"
+        self.button_frame = tk.Frame(self.left_frame)
+        self.build_button_frame()
+        self.button_frame.pack()
+
+        "Solve Button Frame"
+        self.solve_butt_frame = tk.Frame(self.left_frame)
+        self.build_solve_button_frame()
+        self.solve_butt_frame.pack(pady = 10, fill = tk.BOTH, expand = True)
+
+        "Table Frame"
+        self.table_frame = tk.LabelFrame(self.left_frame, borderwidth = 0,
+                                         relief = tk.GROOVE, text = "Tableau")
+        self.build_table_frame()
+        self.table_frame.pack()
+
+    "------------------------------Left Frame-----------------------------------------"
+    "----------------------------------------Setting Buttons Frame--------------------"
+
+    def build_button_frame(self):
+        "Builds the frame that contains the buttons at initialization"
+
+        "Goal funciton frame"
+        self.gf_frame = tk.Frame(self.button_frame)
+        self.build_gf_frame_unfilled()
+        self.gf_frame.pack(side = "top")
+
+        "Constraints frame"
+        self.constraints_frame = tk.Frame(self.button_frame)
+        self.build_cons_frame()
+        self.constraints_frame.pack()
+
+    "-----------------------------------------Goal Function Frame--------------------"
+
+    def build_gf_frame_unfilled(self):
+        self.button_gf = tk.Button(self.gf_frame, text='Fonction objectif')
+        self.button_gf.bind('<Button-1>', self.action_button_gf)
+        self.button_gf.pack(side = "top", pady = 10)
+
+    def action_button_gf(self, event):
+        FunctionCreation(self)
+
+    def build_gf_frame_filled(self):
+        self.button_gf.destroy()
+        self.label_gf = tk.Label(self.gf_frame, text = self.gf.__str__())
+        self.label_gf.pack(side = "left")
+        self.button_edit_gf = tk.Button(self.gf_frame, text = "Edit")
+        self.button_edit_gf.bind("<Button-1>", self.edit_gf)
+        self.button_edit_gf.pack(side = "right")
+
+    def edit_gf(self, event):
+        self.label_gf.destroy()
+        self.button_edit_gf.destroy()
+        self.build_gf_frame_unfilled()
+
+    "--------------------------------------------Constraints Frame-----------------------"
+
+    def build_cons_frame(self):
+        self.label_cons = tk.Label(self.constraints_frame, text = "Contraintes")
+        self.label_cons.pack(side = "top")
+
+        self.cons_buttons_frame = tk.Frame(self.constraints_frame)
+        self.build_cons_buttons_frame()
+        self.cons_buttons_frame.pack(side = "right", padx = 2)
+
+        self.list_constraints = tk.Listbox(self.constraints_frame, height = 4)
+        self.list_constraints.pack()
+
+    def build_cons_buttons_frame(self):
+        self.button_add_cons = tk.Button(self.cons_buttons_frame, text = "Add")
+        self.button_add_cons.bind('<Button-1>', self.add_button_action)
+        self.button_add_cons.pack(pady = 1, fill = tk.BOTH, expand = True)
+
+        self.button_del_cons = tk.Button(self.cons_buttons_frame, text = "Del")
+        self.button_del_cons.bind('<Button-1>', self.del_button_action)
+        self.button_del_cons.pack(pady = 1, fill = tk.BOTH, expand = True)
+
+    def add_button_action(self, event):
+        ConstraintCreation(self)
+
+    def add_constraint(self, constraint):
         print(constraint.toString())
         n = len(self.constraints) + 1
-        self.listConstraints.insert(n, constraint.toString())
+        self.list_constraints.insert(n, constraint.toString())
         if constraint.operatorConstraint == '=':
             constraint1 = Constraint(constraint.coeffsConstraint, '<=').normalize()
             constraint2 = Constraint(constraint.coeffsConstraint, '>=').normalize()
@@ -111,27 +130,47 @@ class Window(Tk):
         else:
             #constraint = constraint.normalize()
             self.constraints.append(constraint)
+        size = self.list_constraints.size()
+        if size > 4 :
+            self.list_constraints.configure(height = size)
+        self.graph()
 
-    def setGF(self, gf):
-        self.gf = gf.normalize()
+    def del_button_action(self, event):
+        ind = self.list_constraints.curselection().__getitem__(0)
+        if isinstance(ind, int) :
+            print (ind)
+            self.list_constraints.delete(ind)
+            self.constraints.pop(ind)
+        self.graph()
 
-    def buttonConstraint(self, event):
-        ConstraintCreation(self)
+    "--------------------Solve Button Frame------------------------------------"
 
-    def buttonModifier(self, event):
-        pass
+    def build_solve_button_frame(self):
+        self.solve_butt = tk.Button(self.solve_butt_frame, text = "Solve", bg = "red", width = 27)#a changer
+        self.solve_butt.bind("<Button-1>", self.solve)
+        self.solve_butt.pack(fill = tk.BOTH, expand = True)
 
-    def buttonGF(self, event):
-        FunctionCreation(self)
-        # print("GF")
+    "---------------------Table Frame------------------------------------------"
+
+    def build_table_frame(self):
+        for line in range(5):
+            for column in range(5):
+                tk.Label(self.table_frame, text = 'L%s-C%s' % (line, column), relief = tk.GROOVE,
+                         borderwidth = 5).grid(row = line, column = column)
+
+
+
+    "--------------Right Frame-------------------------------------------------"
+    "---------------------------Graph Display----------------------------------"
 
     def solve(self, event):
-        print('solve')
         self.graph()
-        #self.table = TableFinale(self.constraints, self.gf)
-        #self.solver = Solver(self.table)
-        #self.solver.solve()
+        self.table = TableFinale(self.constraints, self.gf)
+        self.solver = Solver(self.table)
+        self.solver.solve()
 
 
-from Presentation.ConstraintCreation import *
-from Presentation.FunctionCreation import *
+    def graph(self):
+        self.right_frame.destroy()
+        self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
+        self.right_frame.pack(side='right')
