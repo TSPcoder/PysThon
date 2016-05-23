@@ -85,7 +85,7 @@ class Window(Frame):
         self.FrameRight = Frame(self, borderwidth=0, relief=GROOVE)
         self.FrameRight.pack(side="right")
 
-        CanvasGraph = Canvas(self.FrameRight, width =self.width*0.66, height =self.height, bg="blue")
+        CanvasGraph = Graph(self.FrameRight, width =self.width*0.66, height =self.height)
         CanvasGraph.pack(side = "right")
 
         # Generate some example data
