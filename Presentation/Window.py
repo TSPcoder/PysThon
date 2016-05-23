@@ -15,18 +15,17 @@ from tkinter import *
 # Creation of our window
 
 
-class Window:
-    def __init__(self, Boss=None, width=200, height=150):
-        self.root = Tk()
+class Window(Tk):
+    def __init__(self, *args, **kwargs):
+        Tk.__init__(self, *args, **kwargs)
 
-        self.root.configure(width=width, height=height)
         self.constraints = []
         self.gf = None
         self.solver = None
         self.table = None
 
         # Left of the GUI
-        self.frameLeft = Frame(self.root, borderwidth=0, relief=GROOVE)
+        self.frameLeft = Frame(self, borderwidth=0, relief=GROOVE)
         self.frameLeft.pack(side="left")
 
         frameTop = Frame(self.frameLeft, borderwidth=0, relief=GROOVE)
@@ -64,10 +63,7 @@ class Window:
 
         frameButtons.pack(side="left", padx=0, pady=0)
 
-        frameConstraints = Labelframe(self.frameBottom, borderwidth=0, relief=GROOVE, text="Constraintes")
-        self.listConstraints = Listbox(frameConstraints)
-        self.listConstraints.pack()
-        frameConstraints.pack(side="left", padx=5, pady=5)
+
 
         frameResults = Labelframe(self.frameLeft, borderwidth=0, relief=GROOVE, text="Résultat")
         labelResults = Label(frameResults, text="Résultats", bg="white")
@@ -86,7 +82,7 @@ class Window:
 
         #Right of the GUI
 
-        self.frameRight = Frame(self.root, borderwidth = 0, relief = GROOVE)
+        self.frameRight = Frame(self, borderwidth = 0, relief = GROOVE)
         self.frameRight.pack(side = "right")
 
 
@@ -98,13 +94,13 @@ class Window:
         Y = np.sin(X)
 
         # Create the figure we desire to add to an existing canvas
-        fig = mpl.figure.Figure(figsize = (16, 8))
+        fig = mpl.figure.Figure()
         ax = fig.add_axes([0, 0, 1, 1])
         ax.plot(X, Y)
 
         # Keep this handle alive, or else figure will disappear
         fig_x, fig_y = 100, 100
-        fig_photo = canvasGraph.draw_figure(fig, loc=(fig_x, fig_y))
+        fig_photo = canvasGraph.draw_figure(fig)
         fig_w, fig_h = fig_photo.width(), fig_photo.height()
 
         #draw_figure(canvasGraph, figure, loc=(0, 0))
@@ -112,7 +108,7 @@ class Window:
         #Graphic.pack(side="right", padx=5, pady=5)
 
         # Tkinter loop
-        self.root.mainloop()
+        self.mainloop()
 
     def graph(self):
         fig = mpl.figure.Figure()
