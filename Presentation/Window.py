@@ -62,7 +62,10 @@ class Window(Tk):
 
         frameButtons.pack(side="left", padx=0, pady=0)
 
-
+        frameConstraints = Labelframe(self.frameBottom, borderwidth=0, relief=GROOVE, text="Constraintes")
+        self.listConstraints = Listbox(frameConstraints)
+        self.listConstraints.pack()
+        frameConstraints.pack(side="left", padx=5, pady=5)
 
         frameResults = Labelframe(self.frameLeft, borderwidth=0, relief=GROOVE, text="Résultat")
         labelResults = Label(frameResults, text="Résultats", bg="white")

@@ -2,8 +2,11 @@ import matplotlib as mpl
 import tkinter as tk
 
 from Abstraction.Constraint import Constraint
+from Abstraction.Solver import Solver
+from Abstraction.TableFinale import TableFinale
 from Presentation.ConstraintCreation import ConstraintCreation
 from Presentation.FunctionCreation import FunctionCreation
+from Presentation.GraphFrame import GraphFrame
 
 mpl.use("TkAgg")
 
@@ -17,12 +20,15 @@ class WindowBis(tk.Tk):
         self.constraints = []
 
         "Creating right frame"
+        self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
         self.build_right_frame()
+        self.right_frame.pack()
 
         "Creating left frame"
         self.left_frame = tk.Frame(self)
-        self.left_frame.pack(side = 'left')
         self.build_left_frame()
+        self.left_frame.pack(side = 'left')
+
 
         self.mainloop()
 
@@ -33,36 +39,44 @@ class WindowBis(tk.Tk):
 
     def build_right_frame(self):
         """Builds the right frame of the window that contains the graph"""
+
+        #!!!!!!!!!!!!faut créer le Canvas ici
         pass
 
     def build_left_frame(self):
         "Builds the left frame at initialization"
-        self.button_frame = tk.Frame(self.left_frame)
-        self.button_frame.pack()
-        self.build_button_frame()
 
+        "Problem setting frame"
+        self.button_frame = tk.Frame(self.left_frame)
+        self.build_button_frame()
+        self.button_frame.pack()
+
+        "Solve Button Frame"
+        self.solve_butt_frame = tk.Frame(self.left_frame)
+        self.build_solve_button_frame()
+        self.solve_butt_frame.pack()
+
+        "Table Frame"
+        self.table_frame = tk.LabelFrame(self.left_frame, borderwidth = 0,
+                                         relief = tk.GROOVE, text = "Tableau")
         self.build_table_frame()
+        self.table_frame.pack()
+
 
     "------------------------------Left Frame-----------------------------------------"
 
     def build_button_frame(self):
         "Builds the frame that contains the buttons at initialization"
 
-        "Goal finciton frame"
+        "Goal funciton frame"
         self.gf_frame = tk.Frame(self.button_frame)
-        self.gf_frame.pack(side = "top")
         self.build_gf_frame_unfilled()
+        self.gf_frame.pack(side = "top")
 
         "Constraints frame"
         self.constraints_frame = tk.Frame(self.button_frame)
-        self.constraints_frame.pack()
         self.build_cons_frame()
-
-        "Table Frame"
-        self.table_frame = tk.LabelFrame(self.button_frame, borderwidth = 0,
-                                         relief = tk.GROOVE, text = "Tableau")
-        self.table_frame.pack()
-        self.build_table_frame()
+        self.constraints_frame.pack()
 
     "-----------------------------------------Goal Function Frame--------------------"
 
@@ -70,7 +84,6 @@ class WindowBis(tk.Tk):
         self.button_gf = tk.Button(self.gf_frame, text='Fonction objectif')
         self.button_gf.bind('<Button-1>', self.action_button_gf)
         self.button_gf.pack(side = "top")
-        self.left_frame.pack(side = "top")
 
     def action_button_gf(self, event):
         FunctionCreation(self)
@@ -131,10 +144,36 @@ class WindowBis(tk.Tk):
         self.list_constraints.delete(ind, ind)
         self.constraints.remove(ind)
 
-    "------------------------------------------Table Fraùe----------------------------"
+    "----------------------------Solve Button Frame--------------------------"
+
+    def build_solve_button_frame(self):
+        self.solve_butt = tk.Button(self.solve_butt_frame, text = "Solve", bg = "red", width = 5)
+        self.solve_butt.bind("<Button-1>", self.solve)
+        self.solve_butt.pack()
+
+    "-----------------------------Table Frame----------------------------------"
 
     def build_table_frame(self):
         for line in range(5):
             for column in range(5):
                 tk.Label(self.table_frame, text = 'L%s-C%s' % (line, column), relief = tk.GROOVE,
                          borderwidth = 5).grid(row = line, column = column)
+
+
+    "---------------------------Graph Display----------------------------------"
+
+    def solve(self, event):
+        self.graph()
+        self.table = TableFinale(self.constraints, self.gf)
+        self.solver = Solver(self.table)
+        self.solver.solve()
+
+
+    def graph(self):
+        fig = mpl.figure.Figure()
+        self.ax = self.canvasGraph.draw_constraints(self.constraints, fig)
+        fig.set_figheight(self.height/fig.dpi)
+        fig.set_figwidth(self.width/fig.dpi)
+        fig_x, fig_y = 0, 0
+        fig_photo = self.right_frame.draw_figure(fig, loc=(fig_x, fig_y))
+        fig_w, fig_h = fig_photo.width(), fig_photo.height()

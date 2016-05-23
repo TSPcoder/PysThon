@@ -11,3 +11,6 @@ class GraphFrame(tk.Frame):
         a.plot([1, 2, 3, 4])
 
         canvas = FigureCanvasTkAgg (f, self)
+
+    def draw_figure(self, figure):
+        pass
