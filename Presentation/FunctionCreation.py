@@ -80,5 +80,6 @@ class FunctionCreation:
         else:
             gf = GoalFunction([self.str_to_int(self.c1.get()), self.str_to_float(self.c2.get()), self.str_to_float(self.cst.get())]
                               ,self.op.get())
-            self.win.setGF(gf)
+            self.win.set_gf(gf)
+            self.win.build_gf_frame_filled()
             self.window.destroy()

@@ -58,7 +58,6 @@ class Window(Tk):
         f.pack(side="bottom", padx=5, pady=5)
 
         b = Button(frameButtons, text='Ajouter une Contrainte')
-        b.bind('<Button-1>', self.buttonConstraint)
         b.pack(side="bottom", padx=5, pady=5)
 
         frameButtons.pack(side="left", padx=0, pady=0)

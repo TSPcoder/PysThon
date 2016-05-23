@@ -10,4 +10,4 @@ class ConstraintControl:
 
     def validate(self, event):
         c = Constraint(self.cons_crea.getCoefs(), self.cons_crea.getOp())
-        self.win.addConstraint(c)
+        self.win.add_constraint(c)

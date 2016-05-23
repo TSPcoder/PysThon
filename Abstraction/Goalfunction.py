@@ -21,8 +21,14 @@ class GoalFunction:
         self.minOrMax=myMinOrMax
 
 
-    # e.g , with the example above , normalize returns [3,4,5,True]
+    def __str__(self):
+        """returns a readable expression of the goal funcutron"""
+        op = "min"
+        if not self.minOrMax :
+            op = "max"
+        return "Goal Function :      {} ({}*x + {}*y)".format(op, self.coFunction[0], self.coFunction[1])
 
+    # e.g , with the example above , normalize returns [3,4,5,True]
     def normalize(self):
         output = []
         temp = self.coFunction
