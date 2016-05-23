@@ -22,7 +22,7 @@ class WindowBis(tk.Tk):
         "Creating right frame"
         self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
         self.build_right_frame()
-        self.right_frame.pack()
+        self.right_frame.pack(side = 'right')
 
         "Creating left frame"
         self.left_frame = tk.Frame(self)
@@ -47,7 +47,7 @@ class WindowBis(tk.Tk):
         "Solve Button Frame"
         self.solve_butt_frame = tk.Frame(self.left_frame)
         self.build_solve_button_frame()
-        self.solve_butt_frame.pack(pady=10)
+        self.solve_butt_frame.pack(pady = 10, fill = tk.BOTH)
 
         "Table Frame"
         self.table_frame = tk.LabelFrame(self.left_frame, borderwidth = 0,
@@ -142,7 +142,7 @@ class WindowBis(tk.Tk):
 
     def del_button_action(self, event):
         ind = self.list_constraints.curselection()
-        self.list_constraints.delete(ind, ind)
+        self.list_constraints.delete(ind)
         self.constraints.remove(ind)
 
     "--------------------Solve Button Frame------------------------------------"
