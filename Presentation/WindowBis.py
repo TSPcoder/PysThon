@@ -53,7 +53,7 @@ class WindowBis(tk.Tk):
         "Solve Button Frame"
         self.solve_butt_frame = tk.Frame(self.left_frame)
         self.build_solve_button_frame()
-        self.solve_butt_frame.pack()
+        self.solve_butt_frame.pack(pady=10)
 
         "Table Frame"
         self.table_frame = tk.LabelFrame(self.left_frame, borderwidth = 0,
@@ -63,6 +63,7 @@ class WindowBis(tk.Tk):
 
 
     "------------------------------Left Frame-----------------------------------------"
+    "----------------------------------------Setting Buttons Frame"
 
     def build_button_frame(self):
         "Builds the frame that contains the buttons at initialization"
@@ -146,7 +147,7 @@ class WindowBis(tk.Tk):
     "----------------------------Solve Button Frame--------------------------"
 
     def build_solve_button_frame(self):
-        self.solve_butt = tk.Button(self.solve_butt_frame, text = "Solve", bg = "red", width = 5)
+        self.solve_butt = tk.Button(self.solve_butt_frame, text = "Solve", bg = "red", width = 27)#a changer
         self.solve_butt.bind("<Button-1>", self.solve)
         self.solve_butt.pack()
 
