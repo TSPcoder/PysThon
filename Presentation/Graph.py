@@ -17,41 +17,39 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 
 class Graph(Canvas):
-  "Canevas that build the geometric aspect of the problem"
-def __init__(self, boss =None, width=200, height=150):
-     # constructor
-    Canvas.__init__(self)
+    "Canvas that build the geometric aspect of the problem"
+    def __init__(self, boss =None, width=200, height=150):
+         # constructor
+        Canvas.__init__(self)
 
-    # de la classe parente
-    self.configure(width=width, height=height, bg='white')
+        # de la classe parente
+        self.configure(width=width, height=height, bg='white')
 
-    # mémorisation
-    self.width, self.height = width, height
+        # memorisation
+        self.width, self.height = width, height
 
 
 
-def draw_figure(canvas, figure, loc=(0, 0)):
-    """ Draw a matplotlib figure onto a Tk canvas
+    def draw_figure(self, figure, loc=(0, 0)):
+        """ Draw a matplotlib figure onto a Tk canvas
+        loc: location of top-left corner of figure on canvas in pixels.
+        Inspired by matplotlib source: lib/matplotlib/backends/backend_tkagg.py
+        """
+        figure_canvas_agg = FigureCanvasAgg(figure)
+        figure_canvas_agg.draw()
+        figure_x, figure_y, figure_w, figure_h = figure.bbox.bounds
+        figure_w, figure_h = int(figure_w), int(figure_h)
+        photo = tk.PhotoImage(master=self, width=figure_w, height=figure_h)
 
-    loc: location of top-left corner of figure on canvas in pixels.
+        # Position: convert from top-left anchor to center anchor
+        self.create_image(loc[0] + figure_w / 2, loc[1] + figure_h / 2, image=photo)
 
-    Inspired by matplotlib source: lib/matplotlib/backends/backend_tkagg.py
-    """
-    figure_canvas_agg = FigureCanvasAgg(figure)
-    figure_canvas_agg.draw()
-    figure_x, figure_y, figure_w, figure_h = figure.bbox.bounds
-    figure_w, figure_h = int(figure_w), int(figure_h)
-    photo = tk.PhotoImage(master=canvas, width=figure_w, height=figure_h)
+        # Unfortunatly, there's no accessor for the pointer to the native renderer
+        tkagg.blit(photo, figure_canvas_agg.get_renderer()._renderer, colormode=2)
 
-    # Position: convert from top-left anchor to center anchor
-    canvas.create_image(loc[0] + figure_w/2, loc[1] + figure_h/2, image=photo)
-
-    # Unfortunatly, there's no accessor for the pointer to the native renderer
-    tkagg.blit(photo, figure_canvas_agg.get_renderer()._renderer, colormode=2)
-
-    # Return a handle which contains a reference to the photo object
-    # which must be kept live or else the picture disappears
-    return photo
+        # Return a handle which contains a reference to the photo object
+        # which must be kept live or else the picture disappears
+        return photo
 
     def draw_constraints(self, constraints,figure):
         xmax = 0

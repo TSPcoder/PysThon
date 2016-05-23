@@ -3,21 +3,23 @@
 from Presentation.Graph import *
 from Abstraction.Solver import *
 from Abstraction.TableFinale import *
+from Presentation.Graph import Graph
 from tkinter.ttk import Labelframe
-import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib as mpl
+from Presentation.ConstraintCreation import *
+from Presentation.FunctionCreation import *
+from tkinter import *
+
 
 # Creation of our window
 
 
-
-class Window(Frame):
+class Window:
     def __init__(self, Boss=None, width=200, height=150):
-        self.win = Tk()
-        Frame.__init__(self)
-
+        self.root = Tk()
 
         self.configure(width=width, height=height)
-        self.width, self.height = self.win.winfo_screenwidth(), self.win.winfo_screenheight()-80
         self.constraints = []
         self.gf = None
         self.solver = None
@@ -87,8 +89,9 @@ class Window(Frame):
         self.FrameRight = Frame(self, borderwidth=0, relief=GROOVE)
         self.FrameRight.pack(side="right")
 
-        CanvasGraph = Graph(self.FrameRight, width =self.width*0.66, height =self.height)
-        CanvasGraph.pack(side = "right")
+
+        canvasGraph = Graph(self.FrameRight, width =self.width*0.66, height =self.height)
+        canvasGraph.pack(side = "right")
 
         # Generate some example data
         X = np.linspace(0, 2.0*3.14, 50)
@@ -101,16 +104,16 @@ class Window(Frame):
 
         # Keep this handle alive, or else figure will disappear
         fig_x, fig_y = 100, 100
-        fig_photo = draw_figure(CanvasGraph, fig, loc=(fig_x, fig_y))
+        fig_photo = canvasGraph.draw_figure(fig, loc=(fig_x, fig_y))
         fig_w, fig_h = fig_photo.width(), fig_photo.height()
 
-        #draw_figure(CanvasGraph, figure, loc=(0, 0))
+        #draw_figure(canvasGraph, figure, loc=(0, 0))
         #Graphic = Graph(self.FrameTop, width=1000, height=750)
         #Graphic.pack(side="right", padx=5, pady=5)
 
-        self.pack()
+        self.root.pack()
         # Tkinter loop
-        self.win.mainloop()
+        self.root.mainloop()
 
     def graph(self):
         fig = mpl.figure.Figure()
@@ -149,7 +152,3 @@ class Window(Frame):
         self.table = TableFinale(self.constraints, self.gf)
         self.solver = Solver(self.table)
         self.solver.solve()
-
-
-from Presentation.ConstraintCreation import *
-from Presentation.FunctionCreation import *
