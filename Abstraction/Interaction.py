@@ -1,5 +1,5 @@
 # -*-coding:utf-8 -*
-
+from Abstraction.Constraint import Constraint
 from Abstraction.Goalfunction import *
 # from Abstraction.Table import *
 from Abstraction.Table2 import *

@@ -84,7 +84,7 @@ class WindowBis(tk.Tk):
         self.button_gf.destroy()
         self.label_gf = tk.Label(self.gf_frame, text = self.gf.__str__())
         self.label_gf.pack(side = "left")
-        self.button_edit_gf = tk.Button(self.gf_frame, text = "Edit")
+        self.button_edit_gf = tk.Button(self.gf_frame, image = "images/buttonedit.png")
         self.button_edit_gf.bind("<Button-1>", self.edit_gf)
         self.button_edit_gf.pack(side = "right")
 
