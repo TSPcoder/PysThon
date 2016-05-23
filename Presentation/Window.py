@@ -19,14 +19,14 @@ class Window:
     def __init__(self, Boss=None, width=200, height=150):
         self.root = Tk()
 
-        self.configure(width=width, height=height)
+        self.root.configure(width=width, height=height)
         self.constraints = []
         self.gf = None
         self.solver = None
         self.table = None
 
         # Left of the GUI
-        self.frameLeft = Frame(self, borderwidth=0, relief=GROOVE)
+        self.frameLeft = Frame(self.root, borderwidth=0, relief=GROOVE)
         self.frameLeft.pack(side="left")
 
         frameTop = Frame(self.frameLeft, borderwidth=0, relief=GROOVE)
@@ -86,11 +86,11 @@ class Window:
 
         #Right of the GUI
 
-        self.FrameRight = Frame(self, borderwidth=0, relief=GROOVE)
-        self.FrameRight.pack(side="right")
+        self.frameRight = Frame(self.root, borderwidth = 0, relief = GROOVE)
+        self.frameRight.pack(side = "right")
 
 
-        canvasGraph = Graph(self.FrameRight, width =self.width*0.66, height =self.height)
+        canvasGraph = Graph(self.frameRight)
         canvasGraph.pack(side = "right")
 
         # Generate some example data
@@ -98,7 +98,7 @@ class Window:
         Y = np.sin(X)
 
         # Create the figure we desire to add to an existing canvas
-        fig = mpl.figure.Figure(figsize=(16, 8))
+        fig = mpl.figure.Figure(figsize = (16, 8))
         ax = fig.add_axes([0, 0, 1, 1])
         ax.plot(X, Y)
 
@@ -111,7 +111,6 @@ class Window:
         #Graphic = Graph(self.FrameTop, width=1000, height=750)
         #Graphic.pack(side="right", padx=5, pady=5)
 
-        self.root.pack()
         # Tkinter loop
         self.root.mainloop()
 
