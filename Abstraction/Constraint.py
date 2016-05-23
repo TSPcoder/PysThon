@@ -4,15 +4,6 @@ import matplotlib.pyplot as plt
 
 
 class Constraint :
-   #yo testestekkkkkkkkkkkk etstest222
-    """
-    Defining of a constraint
-
-    Variables : - coeffs list
-                - constant
-                - operateur ( a String )
-
-    """
 
     def __init__(self, myCoeffs = [1,1,1], myOperator = "<="):
         self.coeffsConstraint = myCoeffs
@@ -33,4 +24,28 @@ class Constraint :
             if self.operatorConstraint == ">=":
                 for elt in temp :
                     outPut.append(-elt)
+        return outPut
+
+    def intersection(self):
+        outPut =[]
+        if self.coeffsConstraint[0] != 0 and self.coeffsConstraint[1] != 0 :
+            x = self.coeffsConstraint[2]/self.coeffsConstraint[0]
+            outPut.append(0)
+            outPut.append(x)
+            y = self.coeffsConstraint[2]/self.coeffsConstraint[1]
+            outPut.append(y)
+            outPut.append(0)
+        elif self.coeffsConstraint[0] == 0 :
+            y = self.coeffsConstraint[2]/self.coeffsConstraint[1]
+            outPut.append(1)
+            outPut.append(y)
+            outPut.append(0)
+            outPut.append(y)
+
+        elif self.coeffsConstraint[1] == 0 :
+            x = self.coeffsConstraint[2]/self.coeffsConstraint[0]
+            outPut.append(x)
+            outPut.append(0)
+            outPut.append(x)
+            outPut.append(1)
         return outPut

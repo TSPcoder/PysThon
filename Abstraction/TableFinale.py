@@ -3,7 +3,7 @@ class TableFinale:
 
 
         def __init__(self, constraints, gf):
-            self.tab = constraints
+            self.tab = list(constraints)
             self.tab.append(gf)
 
         """
@@ -34,7 +34,7 @@ class TableFinale:
 
 
         # normalisation of the constraints
-        # A COMPLETER
+
         def addZeros(self,i,nb):
             l = self.tab[i]
             n = len(l)
@@ -54,12 +54,30 @@ class TableFinale:
             # swap the ones
 
             for i in range(n-1):
-                self.tab[i][2],self.tab[i][len(self.tab[i])-1]= self.tab[i][len(self.tab[i])-1],self.tab[i][2]
+                self.tab[i][2],self.tab[i][len(self.tab[i])-1] = self.tab[i][len(self.tab[i])-1],self.tab[i][2]
                 self.tab[i][2],self.tab[i][i+2] = self.tab[i][i+2],self.tab[i][2]
             # add the zeros on gf
 
             for i in range(n-1):
                 self.tab[n-1].append(0)
+
+        def normalize_deux_phases(self):
+            self.normalize()
+            cpt = 0
+            n = len(self.tab)
+            m = len(self.tab[0])
+            for i in range(n-1):
+                if self.tab[i][m-1] < 0:
+                    self.tab[i].append(1)
+                    cpt += 1
+                else:
+                    self.tab[i].append(0)
+
+            for j in range(n-1):
+                for i in range(cpt-1):
+                    self.tab[j].append(0)
+
+
 
         def allNeg(self):
             outPut = True
@@ -67,11 +85,21 @@ class TableFinale:
             n = len(self.tab)
             m = len(self.tab[n-1])
 
-            while i < m and outPut == True :
+            while i < m and outPut:
                 outPut=self.tab[n-1][i] <= 0
                 i += 1
 
             return outPut
+
+        def get_second_membre(self):
+            res = []
+            i = 0
+            n = len(self.tab)
+            m = len(self.tab[0])
+            while i < m:
+                res.append(self.tab[i][m-1])
+            return res
+
 
         def op(self,alpha,beta,i,j):
             li,lj = self.tab[i],self.tab[j]
@@ -84,6 +112,14 @@ class TableFinale:
                 nl.append(ti[elt] - tj[elt])
             self.tab[i]=nl
 
+        def copy(self):
+            res = []
+            for i in range(len(self.tab)):
+                temp = []
+                for j in range(len(self.tab[i])):
+                    temp.append(self.tab[i][j])
+                res.append(temp)
+            return res
 def main():
     a = [[1,1,4],[1,0,3],[0,1,2]]
     b = [300,100,0]
