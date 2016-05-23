@@ -21,7 +21,6 @@ class WindowBis(tk.Tk):
 
         "Creating right frame"
         self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
-        self.build_right_frame()
         self.right_frame.pack(side = 'right')
 
         "Creating left frame"
@@ -54,14 +53,6 @@ class WindowBis(tk.Tk):
                                          relief = tk.GROOVE, text = "Tableau")
         self.build_table_frame()
         self.table_frame.pack()
-
-
-    def build_right_frame(self):
-        """Builds the right frame of the window that contains the graph"""
-
-        #!!!!!!!!!!!!faut créer le Canvas ici
-        pass
-
 
     "------------------------------Left Frame-----------------------------------------"
     "----------------------------------------Setting Buttons Frame--------------------"
@@ -175,10 +166,6 @@ class WindowBis(tk.Tk):
 
 
     def graph(self):
-        fig = mpl.figure.Figure()
-        self.ax = self.canvasGraph.draw_constraints(self.constraints, fig)
-        fig.set_figheight(self.height/fig.dpi)
-        fig.set_figwidth(self.width/fig.dpi)
-        fig_x, fig_y = 0, 0
-        fig_photo = self.right_frame.draw_figure(fig, loc=(fig_x, fig_y))
-        fig_w, fig_h = fig_photo.width(), fig_photo.height()
+        self.right_frame.destroy()
+        self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
+        self.right_frame.pack(side='right')

@@ -10,10 +10,6 @@ class ConstraintCreation:
         self.ops = ['<=', '=', '>=']
 
         Label(self.window, text='Nouvelle Contrainte').grid(row=1, column=1, columnspan=2, padx=10, pady=5)
-        name = StringVar()
-        name.set("Nom de la contrainte")
-        self.nom = Entry(self.window, textvariable=name, width=30)
-        self.nom.grid(row=2, column=1, columnspan=2, padx=10, pady=5)
 
         Label(self.window, text='Coefficient de x1').grid(row=3, column=1, padx=10, pady=5, stick=E)
         coef1 = StringVar()

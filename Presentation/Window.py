@@ -3,14 +3,13 @@
 from Presentation.Graph import *
 from Abstraction.Solver import *
 from Abstraction.TableFinale import *
-from Presentation.Graph import Graph
 from tkinter.ttk import Labelframe
-import numpy as np
-import matplotlib as mpl
-from Presentation.ConstraintCreation import *
-from Presentation.FunctionCreation import *
-from tkinter import *
+import matplotlib.pyplot as plt
+import matplotlib
 
+from matplotlib.figure import Figure
+
+from tkinter import ttk
 
 # Creation of our window
 
@@ -34,13 +33,9 @@ class Window(Tk):
         frameModification = Labelframe(frameTop, borderwidth=0, relief=GROOVE,text="Modification de la Contrainte")
         Label(frameModification, text='Nom de la contrainte').grid(row=1, column=1, columnspan=2, padx=10, pady=5)
         Label(frameModification, text='Affichage constrainte').grid(row=2, column=1, columnspan=2, padx=10, pady=5)
-        Button(frameModification, text='Modifier').grid(row=3, column=1, columnspan=2, padx=10, pady=5)
-        Button(frameModification, text='décaler à gauche').grid(row=4, column=1, padx=10, pady=2.5, stick=E)
-        Button(frameModification, text='décaler à droite').grid(row=4, column=2, padx=10, pady=5, stick=W)
-        Button(frameModification, text='décaler en haut').grid(row=5, column=1, padx=10, pady=5, stick=E)
-        Button(frameModification, text='décaler en bas').grid(row=5, column=2, padx=10, pady=5, stick=W)
-        Button(frameModification, text='tourner sens horaire').grid(row=6, column=1, padx=10, pady=5, stick=E)
-        Button(frameModification, text='tourner sens anti horaire').grid(row=6, column=2, padx=10, pady=5, stick=W)
+        m = Button(frameModification, text='Modifier')
+        m.grid(row=3, column=1, columnspan=2, padx=10, pady=5)
+        m.bind('<Button-1>', self.buttonModifier)
         Button(frameModification, text='Supprimer').grid(row=7, column=1, columnspan=2, padx=10, pady=5)
         frameModification.pack(side="left", padx=5, pady=5)
 
@@ -78,48 +73,31 @@ class Window(Tk):
                 Label(frameTable, text='L%s-C%s' % (ligne, colonne), relief=GROOVE, borderwidth=5).grid(row=ligne,
                                                                                                         column=colonne)
 
-        Button(frameTable, text='Suivant').grid(row=1, column=1, padx=10, pady=2.5, stick=E)
-        Button(frameTable, text='Précedent').grid(row=1, column=2, padx=10, pady=5, stick=W)
         frameTable.pack(side="top", padx=5, pady=5)
-
-        #Right of the GUI
-
-        self.frameRight = Frame(self, borderwidth = 0, relief = GROOVE)
-        self.frameRight.pack(side = "right")
-
-
-        canvasGraph = Graph(self.frameRight)
-        canvasGraph.pack(side = "right")
-
-        # Generate some example data
-        X = np.linspace(0, 2.0*3.14, 50)
-        Y = np.sin(X)
-
-        # Create the figure we desire to add to an existing canvas
-        fig = mpl.figure.Figure()
-        ax = fig.add_axes([0, 0, 1, 1])
-        ax.plot(X, Y)
-
-        # Keep this handle alive, or else figure will disappear
-        fig_x, fig_y = 100, 100
-        fig_photo = canvasGraph.draw_figure(fig)
-        fig_w, fig_h = fig_photo.width(), fig_photo.height()
-
-        #draw_figure(canvasGraph, figure, loc=(0, 0))
-        #Graphic = Graph(self.FrameTop, width=1000, height=750)
-        #Graphic.pack(side="right", padx=5, pady=5)
 
         # Tkinter loop
         self.mainloop()
 
     def graph(self):
-        fig = mpl.figure.Figure()
-        self.ax = self.canvasGraph.draw_constraints(self.constraints, fig)
-        fig.set_figheight(self.height/fig.dpi)
-        fig.set_figwidth(self.width/fig.dpi)
-        fig_x, fig_y = 0, 0
-        fig_photo = self.canvasGraph.draw_figure(fig, loc=(fig_x, fig_y))
-        fig_w, fig_h = fig_photo.width(), fig_photo.height()
+        xmax = 0
+        ymax = 0
+        for c in self.constraints:
+            print(type(c))
+            table = c.intersection()
+            if table[1]>xmax:
+                xmax = table[1]
+            if table[2]>ymax:
+                ymax = table[2]
+        plt.axis([0,xmax, 0, ymax])
+        for c in self.constraints:
+            coefs = c.coeffsConstraint
+            if coefs[0] != 0 and coefs[1] != 0:
+                plt.plot([0, xmax], [ymax, 0])
+            elif coefs[0] == 0 and coefs[1] != 0:
+                plt.plot([0, xmax],[coefs[2]/coefs[1], coefs[2]/coefs[1]])
+            elif coefs[0] != 0 and coefs[1] == 0:
+                plt.plot([coefs[2]/coefs[0],coefs[2]/coefs[0]], [0,ymax])
+        plt.show()
 
     def addConstraint(self, constraint):
         print(constraint.toString())
@@ -140,12 +118,20 @@ class Window(Tk):
     def buttonConstraint(self, event):
         ConstraintCreation(self)
 
+    def buttonModifier(self, event):
+        pass
+
     def buttonGF(self, event):
         FunctionCreation(self)
         # print("GF")
 
     def solve(self, event):
+        print('solve')
         self.graph()
-        self.table = TableFinale(self.constraints, self.gf)
-        self.solver = Solver(self.table)
-        self.solver.solve()
+        #self.table = TableFinale(self.constraints, self.gf)
+        #self.solver = Solver(self.table)
+        #self.solver.solve()
+
+
+from Presentation.ConstraintCreation import *
+from Presentation.FunctionCreation import *
