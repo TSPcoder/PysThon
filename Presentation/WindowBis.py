@@ -130,6 +130,7 @@ class WindowBis(tk.Tk):
         else:
             #constraint = constraint.normalize()
             self.constraints.append(constraint)
+        self.graph()
 
     def del_button_action(self, event):
         ind = self.list_constraints.curselection().__getitem__(0)
@@ -137,6 +138,7 @@ class WindowBis(tk.Tk):
             print (ind)
             self.list_constraints.delete(ind)
             self.constraints.pop(ind)
+        self.graph()
 
     "--------------------Solve Button Frame------------------------------------"
 
