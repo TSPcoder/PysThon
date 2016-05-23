@@ -36,12 +36,6 @@ class WindowBis(tk.Tk):
 
     "---------------Main Frames---------------------------------------------------------"
 
-    def build_right_frame(self):
-        """Builds the right frame of the window that contains the graph"""
-
-        #!!!!!!!!!!!!faut créer le Canvas ici
-        pass
-
     def build_left_frame(self):
         "Builds the left frame at initialization"
 
@@ -62,8 +56,15 @@ class WindowBis(tk.Tk):
         self.table_frame.pack()
 
 
+    def build_right_frame(self):
+        """Builds the right frame of the window that contains the graph"""
+
+        #!!!!!!!!!!!!faut créer le Canvas ici
+        pass
+
+
     "------------------------------Left Frame-----------------------------------------"
-    "----------------------------------------Setting Buttons Frame"
+    "----------------------------------------Setting Buttons Frame--------------------"
 
     def build_button_frame(self):
         "Builds the frame that contains the buttons at initialization"
@@ -144,14 +145,14 @@ class WindowBis(tk.Tk):
         self.list_constraints.delete(ind, ind)
         self.constraints.remove(ind)
 
-    "----------------------------Solve Button Frame--------------------------"
+    "--------------------Solve Button Frame------------------------------------"
 
     def build_solve_button_frame(self):
         self.solve_butt = tk.Button(self.solve_butt_frame, text = "Solve", bg = "red", width = 27)#a changer
         self.solve_butt.bind("<Button-1>", self.solve)
         self.solve_butt.pack()
 
-    "-----------------------------Table Frame----------------------------------"
+    "---------------------Table Frame------------------------------------------"
 
     def build_table_frame(self):
         for line in range(5):
@@ -160,6 +161,8 @@ class WindowBis(tk.Tk):
                          borderwidth = 5).grid(row = line, column = column)
 
 
+
+    "--------------Right Frame-------------------------------------------------"
     "---------------------------Graph Display----------------------------------"
 
     def solve(self, event):
