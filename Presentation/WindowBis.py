@@ -29,7 +29,6 @@ class WindowBis(tk.Tk):
         self.build_left_frame()
         self.left_frame.pack(side = 'left')
 
-
         self.mainloop()
 
     def set_gf(self, gf):
