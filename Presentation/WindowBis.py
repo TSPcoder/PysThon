@@ -46,7 +46,7 @@ class WindowBis(tk.Tk):
         "Solve Button Frame"
         self.solve_butt_frame = tk.Frame(self.left_frame)
         self.build_solve_button_frame()
-        self.solve_butt_frame.pack(pady = 10, fill = tk.BOTH)
+        self.solve_butt_frame.pack(pady = 10, fill = tk.BOTH, expand = True)
 
         "Table Frame"
         self.table_frame = tk.LabelFrame(self.left_frame, borderwidth = 0,
@@ -75,7 +75,7 @@ class WindowBis(tk.Tk):
     def build_gf_frame_unfilled(self):
         self.button_gf = tk.Button(self.gf_frame, text='Fonction objectif')
         self.button_gf.bind('<Button-1>', self.action_button_gf)
-        self.button_gf.pack(side = "top")
+        self.button_gf.pack(side = "top", pady = 10)
 
     def action_button_gf(self, event):
         FunctionCreation(self)
@@ -100,20 +100,20 @@ class WindowBis(tk.Tk):
         self.label_cons.pack(side = "top")
 
         self.cons_buttons_frame = tk.Frame(self.constraints_frame)
-        self.cons_buttons_frame.pack(side = "right")
         self.build_cons_buttons_frame()
+        self.cons_buttons_frame.pack(side = "right", padx = 2)
 
-        self.list_constraints = tk.Listbox(self.constraints_frame)
+        self.list_constraints = tk.Listbox(self.constraints_frame, height = 4)
         self.list_constraints.pack()
 
     def build_cons_buttons_frame(self):
         self.button_add_cons = tk.Button(self.cons_buttons_frame, text = "Add")
         self.button_add_cons.bind('<Button-1>', self.add_button_action)
-        self.button_add_cons.pack()
+        self.button_add_cons.pack(pady = 1, fill = tk.BOTH, expand = True)
 
         self.button_del_cons = tk.Button(self.cons_buttons_frame, text = "Del")
         self.button_del_cons.bind('<Button-1>', self.del_button_action)
-        self.button_del_cons.pack()
+        self.button_del_cons.pack(pady = 1, fill = tk.BOTH, expand = True)
 
     def add_button_action(self, event):
         ConstraintCreation(self)
@@ -130,6 +130,9 @@ class WindowBis(tk.Tk):
         else:
             #constraint = constraint.normalize()
             self.constraints.append(constraint)
+        size = self.list_constraints.size()
+        if size > 4 :
+            self.list_constraints.configure(height = size)
         self.graph()
 
     def del_button_action(self, event):
@@ -145,7 +148,7 @@ class WindowBis(tk.Tk):
     def build_solve_button_frame(self):
         self.solve_butt = tk.Button(self.solve_butt_frame, text = "Solve", bg = "red", width = 27)#a changer
         self.solve_butt.bind("<Button-1>", self.solve)
-        self.solve_butt.pack()
+        self.solve_butt.pack(fill = tk.BOTH, expand = True)
 
     "---------------------Table Frame------------------------------------------"
 
