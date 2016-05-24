@@ -17,8 +17,11 @@ class Window(tk.Tk):
         """Builds the whole window with two main Frames, the left one contains buttons and the let one contains the graph"""
         tk.Tk.__init__(self)
 
+        self.title("PySThon")
         self.gf = None
         self.constraints = []
+        self.cells_height = 1
+        self.cells_width = 5
 
         "Creating right frame"
         self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
@@ -51,10 +54,7 @@ class Window(tk.Tk):
         self.solve_butt_frame.pack(pady = 10, fill = tk.BOTH, expand = True)
 
         "Table Frame"
-        self.table_frame = tk.LabelFrame(self.left_frame, borderwidth = 0,
-                                         relief = tk.GROOVE, text = "Tableau")
-        self.build_table_frame()
-        self.table_frame.pack()
+        self.create_table_frame()
 
     "------------------------------Left Frame-----------------------------------------"
     "----------------------------------------Setting Buttons Frame--------------------"
@@ -75,10 +75,10 @@ class Window(tk.Tk):
     "-----------------------------------------Goal Function Frame--------------------"
 
     def build_gf_frame_unfilled(self):
-        self.button_test = tk.Button(self.gf_frame, text = "test")
+        self.button_test = tk.Button(self.gf_frame, text = "Démo")
         self.button_test.bind('<Button-1>', self.test)
         self.button_test.pack(side = "top", pady = 10)
-        self.button_gf = tk.Button(self.gf_frame, text='Fonction objectif')
+        self.button_gf = tk.Button(self.gf_frame, text ='Fonction objectif')
         self.button_gf.bind('<Button-1>', self.action_button_gf)
         self.button_gf.pack(side = "top", pady = 10)
 
@@ -94,11 +94,12 @@ class Window(tk.Tk):
     def build_gf_frame_filled(self):
         self.button_gf.destroy()
         self.button_test.destroy()
-        self.label_gf = tk.Label(self.gf_frame, text = self.gf.__str__())
+        self.label_gf = tk.Label(self.gf_frame, text = self.gf.__str__(), relief = tk.GROOVE)
         self.label_gf.pack(side = "left")
         self.button_edit_gf = tk.Button(self.gf_frame, text = "Edit")
         self.button_edit_gf.bind("<Button-1>", self.edit_gf)
         self.button_edit_gf.pack(side = "right")
+        self.build_table_frame()
 
     def edit_gf(self, event):
         self.label_gf.destroy()
@@ -115,7 +116,7 @@ class Window(tk.Tk):
         self.build_cons_buttons_frame()
         self.cons_buttons_frame.pack(side = "right", padx = 2)
 
-        self.list_constraints = tk.Listbox(self.constraints_frame, height = 4)
+        self.list_constraints = tk.Listbox(self.constraints_frame, height = 5)
         self.list_constraints.pack()
 
     def build_cons_buttons_frame(self):
@@ -135,7 +136,6 @@ class Window(tk.Tk):
         ConstraintCreationWindow(self)
 
     def add_constraint(self, constraint):
-        print(constraint.toString())
         n = len(self.constraints) + 1
         self.list_constraints.insert(n, constraint.toString())
         if constraint.operatorConstraint == '=':
@@ -149,6 +149,8 @@ class Window(tk.Tk):
         size = self.list_constraints.size()
         if size > 4 :
             self.list_constraints.configure(height = size)
+        self.build_table_frame()
+        self.table_frame.pack()
         self.graph()
 
     def edit_cons(self, event):
@@ -157,8 +159,6 @@ class Window(tk.Tk):
             self.list_constraints.delete(ind)
             self.constraints.pop(ind)
             ConstraintCreationWindow(self)
-            self.graph()
-
 
     def del_button_action(self, event):
         ind = self.list_constraints.curselection().__getitem__(0)
@@ -166,6 +166,11 @@ class Window(tk.Tk):
             print (ind)
             self.list_constraints.delete(ind)
             self.constraints.pop(ind)
+            if len(self.constraints) == 0 :
+                self.table_frame.destroy()
+                self.create_table_frame()
+            else :
+                self.build_table_frame()
             self.graph()
 
     "--------------------Solve Button Frame------------------------------------"
@@ -177,11 +182,44 @@ class Window(tk.Tk):
 
     "---------------------Table Frame------------------------------------------"
 
+    def create_table_frame(self):
+        self.table_frame = tk.LabelFrame(self.left_frame, borderwidth = 0,
+                                         relief = tk.GROOVE, text = "Tableau")
+        self.table_frame.pack()
+
     def build_table_frame(self):
-        for line in range(5):
-            for column in range(5):
-                tk.Label(self.table_frame, text = 'L%s-C%s' % (line, column), relief = tk.GROOVE,
-                         borderwidth = 5).grid(row = line, column = column)
+        if not self.table_frame is None :
+            self.table_frame.destroy()
+            self.create_table_frame()
+            print(len(self.constraints))
+            line = 0
+            for cons in self.constraints :
+                a, b, c, = cons.coeffsConstraint
+                for column in range(3 + len(self.constraints)):
+                    s = "0"
+                    if column == 0 :
+                        s = str(a)
+                    elif column == 1 :
+                        s = str(b)
+                    elif column == 2 + len(self.constraints) :
+                        s = str(c)
+                    elif line == column - 2 :
+                        s = "1"
+                    tk.Label(self.table_frame, text = s, relief = tk.GROOVE, height = self.cells_height,
+                             width = self.cells_width, borderwidth = 5).grid(row = line, column = column)
+                line += 1
+            if not self.gf == None :
+                for column in range(3 + len(self.constraints)):
+                    s = "0"
+                    a, b, c, = self.gf.coFunction
+                    if column == 0 :
+                        s = str(a)
+                    elif column == 1 :
+                        s = str(b)
+                    elif column == len(self.constraints) + 2 :
+                        s = str(c)
+                    tk.Label(self.table_frame, text = s, relief = tk.GROOVE, height = self.cells_height,
+                             width = self.cells_width, borderwidth = 5).grid(row = line, column = column)
 
 
 
@@ -196,6 +234,17 @@ class Window(tk.Tk):
         self.table = TableFinale(tab, self.gf.normalize())
         self.solver = Solver(self.table)
         self.solver.solve()
+        tabResultat = self.solver.tab
+        print (type(tabResultat))
+        lines = tabResultat.size()
+        columns = len (tabResultat[0])
+        self.table_frame.destroy()
+        self.create_table_frame()
+        for line in range(lines) :
+            for column in range(columns) :
+                tk.Label(self.table_frame, text = str(tabResultat[line][column]), relief = tk.GROOVE, height = self.cells_height,
+                             width = self.cells_width, borderwidth = 5).grid(row = line, column = column)
+
 
 
     def graph(self):

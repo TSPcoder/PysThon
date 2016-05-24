@@ -11,7 +11,6 @@ class GraphFrame(tk.Frame):
         xmax = 0
         ymax = 0
         for c in parent.constraints:
-            print(type(c))
             table = c.intersection()
             if table[1] > xmax:
                 xmax = table[1]

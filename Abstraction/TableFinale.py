@@ -16,7 +16,7 @@ class TableFinale:
             return self.tab[item]
 
         def __setitem__(self, key, value):
-            self.tab[key]=value
+            self.tab[key] = value
 
         def __str__(self):
             return "{}".format(self.tab)

@@ -52,16 +52,15 @@ class Solver:
 
 
 
-        #self.tab.normalize()
+        self.tab.normalize()
         n = self.tab.size()
-        p = len(self.tab[n-1])
         checkValues = []
-        while self.tab.allNeg() == False:
+        while not self.tab.allNeg():
 
             # step 1 : check the last row (on prend le premier)
-           # toCheck,j = self.tab[n-1],0
+            # toCheck,j = self.tab[n-1],0
             #if toCheck[0] < toCheck[1]:
-             #   j= 1
+            #   j= 1
 
             m=len(self.tab[0])
             n=self.tab.size()
@@ -109,8 +108,8 @@ class Solver:
 
             tabChang.append([index, j])
 
-
-        return tabChang
+        self.printTable()
+        print(self.tab)
 
         """
 
@@ -212,5 +211,5 @@ class Solver:
 
 
     def solve(self):
-        self.simplex()
+        return self.simplex()
 
