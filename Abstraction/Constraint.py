@@ -25,12 +25,15 @@ class Constraint :
     def normalize(self):
         outPut = []
         temp = self.coeffsConstraint
-        if self.operatorConstraint == "<=" or self.operatorConstraint == "=":
-            for elt in temp:
-                outPut.append(elt)
+        for elt in temp:
+            outPut.append(elt)
 
-        else:
-            if self.operatorConstraint == ">=":
-                for elt in temp :
-                    outPut.append(-elt)
+        if self.operatorConstraint == ">=":
+            outPut.append(False)
+
+        if self.operatorConstraint == "<=":
+            outPut.append(True)
+
+
+
         return outPut
