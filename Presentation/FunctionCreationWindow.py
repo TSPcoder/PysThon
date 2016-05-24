@@ -1,12 +1,12 @@
 # Autor : Aymeric ALOUGES
 
 from tkinter import *
-from Presentation.Window import *
 from Abstraction.Goalfunction import *
+from tkinter.messagebox import *
 
 #Creation of our window
 
-class FunctionCreation:
+class FunctionCreationWindow:
 
     def __init__(self, win):
         self.window = Tk()
@@ -41,6 +41,8 @@ class FunctionCreation:
         v = Button(self.window, text ='Valider')
         v.grid(row =6, column =1, padx =10, pady =5)
         v.bind('<Button-1>', self.validate)
+        v.bind('<Return>', self.validate)
+
         Button(self.window, text ='Annuler', command=self.window.destroy).grid(row =6, column =2, padx =10, pady =5)
         # Tkinter loop
         self.window.mainloop()
@@ -78,8 +80,8 @@ class FunctionCreation:
             showwarning('Attention !', 'La constante est mal saisie.')
             print("cst est mal saisi")
         else:
-            gf = GoalFunction([self.str_to_int(self.c1.get()), self.str_to_float(self.c2.get()), self.str_to_float(self.cst.get())]
-                              ,self.op.get())
+            gf = GoalFunction([self.str_to_int(self.c1.get()), self.str_to_float(self.c2.get()), self.str_to_float(self.cst.get())],
+                              self.op.get())
             self.win.set_gf(gf)
             self.win.build_gf_frame_filled()
             self.window.destroy()

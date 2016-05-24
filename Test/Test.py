@@ -1,6 +1,8 @@
-from Presentation.Window import WindowBis
+from Presentation.Window import Window
 
-win = WindowBis()
+win = Window()
+
+
 
 '''haut = root.winfo_screenheight()
 larg = root.winfo_screenwidth()

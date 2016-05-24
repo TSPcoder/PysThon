@@ -2,16 +2,17 @@ import matplotlib as mpl
 import tkinter as tk
 
 from Abstraction.Constraint import Constraint
+from Abstraction.Goalfunction import GoalFunction
 from Abstraction.Solver import Solver
 from Abstraction.TableFinale import TableFinale
-from Presentation.ConstraintCreationWindow import ConstraintCreation
-from Presentation.FunctionCreationWindow import FunctionCreation
+from Presentation.ConstraintCreationWindow import ConstraintCreationWindow
+from Presentation.FunctionCreationWindow import FunctionCreationWindow
 from Presentation.GraphFrame import GraphFrame
 
 mpl.use("TkAgg")
 
 
-class WindowBis(tk.Tk):
+class Window(tk.Tk):
     def __init__(self):
         """Builds the whole window with two main Frames, the left one contains buttons and the let one contains the graph"""
         tk.Tk.__init__(self)
@@ -32,6 +33,7 @@ class WindowBis(tk.Tk):
 
     def set_gf(self, gf):
         self.gf = gf
+        self.build_gf_frame_filled()
 
     "---------------Main Frames---------------------------------------------------------"
 
@@ -73,18 +75,28 @@ class WindowBis(tk.Tk):
     "-----------------------------------------Goal Function Frame--------------------"
 
     def build_gf_frame_unfilled(self):
+        self.button_test = tk.Button(self.gf_frame, text = "test")
+        self.button_test.bind('<Button-1>', self.test)
+        self.button_test.pack(side = "top", pady = 10)
         self.button_gf = tk.Button(self.gf_frame, text='Fonction objectif')
         self.button_gf.bind('<Button-1>', self.action_button_gf)
         self.button_gf.pack(side = "top", pady = 10)
 
+    def test(self, event):
+        self.add_constraint(Constraint([1, 1, 4], "<="))
+        self.add_constraint(Constraint([1, 0, 3], "<="))
+        self.add_constraint(Constraint([0, 1, 2], "<="))
+        self.set_gf(GoalFunction([300, 100, 0], True))
+
     def action_button_gf(self, event):
-        FunctionCreation(self)
+        FunctionCreationWindow(self)
 
     def build_gf_frame_filled(self):
         self.button_gf.destroy()
+        self.button_test.destroy()
         self.label_gf = tk.Label(self.gf_frame, text = self.gf.__str__())
         self.label_gf.pack(side = "left")
-        self.button_edit_gf = tk.Button(self.gf_frame, image = "images/buttonedit.png")
+        self.button_edit_gf = tk.Button(self.gf_frame, text = "Edit")
         self.button_edit_gf.bind("<Button-1>", self.edit_gf)
         self.button_edit_gf.pack(side = "right")
 
@@ -111,12 +123,16 @@ class WindowBis(tk.Tk):
         self.button_add_cons.bind('<Button-1>', self.add_button_action)
         self.button_add_cons.pack(pady = 1, fill = tk.BOTH, expand = True)
 
+        self.button_edit_cons = tk.Button(self.cons_buttons_frame, text = "Edit")
+        self.button_edit_cons.bind("<Button-1>", self.edit_cons)
+        self.button_edit_cons.pack(pady = 1, fill = tk.BOTH, expand = True)
+
         self.button_del_cons = tk.Button(self.cons_buttons_frame, text = "Del")
         self.button_del_cons.bind('<Button-1>', self.del_button_action)
         self.button_del_cons.pack(pady = 1, fill = tk.BOTH, expand = True)
 
     def add_button_action(self, event):
-        ConstraintCreation(self)
+        ConstraintCreationWindow(self)
 
     def add_constraint(self, constraint):
         print(constraint.toString())
@@ -135,13 +151,22 @@ class WindowBis(tk.Tk):
             self.list_constraints.configure(height = size)
         self.graph()
 
+    def edit_cons(self, event):
+        ind = self.list_constraints.curselection().__getitem__(0)
+        if isinstance(ind, int) and ind >= 0 :
+            self.list_constraints.delete(ind)
+            self.constraints.pop(ind)
+            ConstraintCreationWindow(self)
+            self.graph()
+
+
     def del_button_action(self, event):
         ind = self.list_constraints.curselection().__getitem__(0)
-        if isinstance(ind, int) :
+        if isinstance(ind, int) and ind >= 0 :
             print (ind)
             self.list_constraints.delete(ind)
             self.constraints.pop(ind)
-        self.graph()
+            self.graph()
 
     "--------------------Solve Button Frame------------------------------------"
 
@@ -165,7 +190,10 @@ class WindowBis(tk.Tk):
 
     def solve(self, event):
         self.graph()
-        self.table = TableFinale(self.constraints, self.gf)
+        tab = []
+        for e in self.constraints :
+            tab.append(e.normalize())
+        self.table = TableFinale(tab, self.gf.normalize())
         self.solver = Solver(self.table)
         self.solver.solve()
 

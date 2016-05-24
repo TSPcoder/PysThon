@@ -4,7 +4,7 @@ from tkinter.messagebox import *
 from tkinter import *
 
 
-class ConstraintCreation:
+class ConstraintCreationWindow:
     def __init__(self, win):
         self.window = Tk()
         self.win = win
@@ -36,11 +36,12 @@ class ConstraintCreation:
         self.cst = Entry(self.window, textvariable=constant, width=10)
         self.cst.grid(row = 6, column = 2, padx = 10, pady = 5)
 
-        valider = Button(self.window, text='Valider')
+        valider = Button(self.window, text = 'Valider')
         valider.grid(row = 7, column = 1, padx = 10, pady = 5)
         valider.bind('<Button-1>', self.validate)
+        valider.bind('<Return>', self.validate)
 
-        Button(self.window, text = 'Annuler', command=self.window.destroy).grid(row=7, column=2, padx=10, pady=5)
+        Button(self.window, text = 'Annuler', command=self.window.destroy).grid(row = 7, column = 2, padx = 10, pady = 5)
 
         # Tkinter loop
         self.window.mainloop()
