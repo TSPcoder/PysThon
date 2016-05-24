@@ -120,6 +120,7 @@ class Window(tk.Tk):
         self.list_constraints.pack()
 
     def build_cons_buttons_frame(self):
+
         self.button_add_cons = tk.Button(self.cons_buttons_frame, text = "Add")
         self.button_add_cons.bind('<Button-1>', self.add_button_action)
         self.button_add_cons.pack(pady = 1, fill = tk.BOTH, expand = True)
