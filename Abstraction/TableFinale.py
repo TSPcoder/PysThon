@@ -44,6 +44,10 @@ class TableFinale:
         def normalize(self):
             # add the 1
             n = len(self.tab)
+            for i in range(n):
+                m = len(self.tab[i])
+                del self.tab[i][n-1]
+
             for i in range(n-1):
                 self.tab[i].append(1)
 
@@ -60,6 +64,86 @@ class TableFinale:
 
             for i in range(n-1):
                 self.tab[n-1].append(0)
+
+        def normalizeGen(self):
+            # add the 1
+            n = len(self.tab)
+            m = len(self.tab[0])
+            cmpt = []
+            for i in range(n - 1):
+
+                m = len(self.tab[i])
+                if self.tab[i][m-1] == False:
+                    self.tab[i].append(-1)
+                    cmpt.append(i)
+
+                else :
+                    self.tab[i].append(1)
+
+
+            # add the 0 on the first n-1 lines
+            for i in range(n - 1):
+                    self.addZeros(i, n-1+len(cmpt)-1)
+
+
+
+            # remove the boolean
+
+            for i in range(n):
+                del self.tab[i][3]
+
+
+
+            # swap the ones
+
+            for i in range(n - 1):
+                self.tab[i][2], self.tab[i][len(self.tab[i]) - 1] = self.tab[i][len(self.tab[i]) - 1], self.tab[i][2]
+                self.tab[i][2], self.tab[i][i + 2] = self.tab[i][i + 2], self.tab[i][2]
+
+
+
+            #add the ones on the second diagonal
+
+            for i in range(len(cmpt)) :
+                n=len(self.tab)
+                self.tab[cmpt[i]][2+(n-1)+i]=1
+
+
+            # add the zeros on gf
+            n = len(self.tab)
+            m = len(self.tab[0])
+            for i in range(m-3):
+               self.tab[n - 1].append(0)
+
+
+            nbreVarArt = len(cmpt)
+
+            ck = []
+            for i in range(n-1) :
+                ck.append(0)
+            for i in range(len(cmpt)) :
+                ck[cmpt[i]]=1
+
+
+
+            #set the goal function
+
+            for c in range (m) :
+                somme = 0
+                for i in range (n-1) :
+                    somme = somme + ck[i]*(self.tab[i][c])
+                self.tab[n-1][c] = somme
+
+            for c in range (len(cmpt)) :
+                self[n-1][2+(n-1)+c]=0
+
+
+
+
+
+
+
+
 
         def normalize_deux_phases(self):
             self.normalize()
@@ -91,6 +175,15 @@ class TableFinale:
 
             return outPut
 
+        def printTable(self):
+            print(' '),
+            for i in range(len(self[1])):
+                print(i),
+                print
+            for i, element in enumerate(self):
+                print(i, ' '.join(str(element)))
+
+
         def get_second_membre(self):
             res = []
             i = 0
@@ -120,7 +213,7 @@ class TableFinale:
                     temp.append(self.tab[i][j])
                 res.append(temp)
             return res
-def main():
+"""def main():
     a = [[1,1,4],[1,0,3],[0,1,2]]
     b = [300,100,0]
     ex = TableFinale(a,b)
@@ -132,6 +225,7 @@ def main():
 
 
 main()
+"""
 
 
 
