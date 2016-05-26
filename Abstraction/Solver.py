@@ -193,21 +193,7 @@ class Solver:
         self.tab[n-1][0]=0
         self.tab[n - 1][1] = 0
 
-
-
-
-
         self.simplex()
-
-
-
-
-
-
-
-
-
-
 
 
     def solve(self):

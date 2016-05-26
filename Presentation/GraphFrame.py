@@ -1,10 +1,10 @@
-import tkinter as tk
+from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2
 from matplotlib.figure import Figure
 
-class GraphFrame(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+class GraphFrame(Frame):
+    def __init__(self, parent, controller, bg = "grey", bd = 1, relief = RIDGE, padx  = 3, pady = 3):
+        Frame.__init__(self, parent, bg = bg, bd = bd, relief = relief, pady = pady)
 
         f = Figure(figsize = (5, 5), dpi = 100)
         a = f.add_subplot(111)
@@ -16,7 +16,7 @@ class GraphFrame(tk.Frame):
                 xmax = table[1]
             if table[2] > ymax:
                 ymax = table[2]
-        a.axis([0, xmax, 0, ymax])
+        a.axis([0, xmax, 0, ymax], )
         for c in parent.constraints:
             coefs = c.coeffsConstraint
             if coefs[0] != 0 and coefs[1] != 0:
@@ -30,7 +30,7 @@ class GraphFrame(tk.Frame):
 
         canvas = FigureCanvasTkAgg (f, self)
         canvas.show()
-        canvas.get_tk_widget().pack(padx = 3, pady = 2, fill = tk.BOTH, expand = True)
+        canvas.get_tk_widget().pack(padx = pady, pady = pady)
 '''
     def draw_figure(self, figure):
         xmax = 0

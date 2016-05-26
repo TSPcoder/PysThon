@@ -7,51 +7,60 @@ from Presentation.FunctionCreationWindow import FunctionCreationWindow
 
 
 class LeftFrame(Frame) :
-    def __init__(self, master = None):
-        Frame.__init__(self, master)
+    def __init__(self, master = None, bg = "#909090", bd = 1, relief = RIDGE, padx  = 3, pady = 3):
 
+        self.bg = bg
+        self.subframes_bg = "#a0a0a0"
+        self.bd = 1
         self.cells_height = 1
         self.cells_width = 5
 
+        Frame.__init__(self, master, bg = self.bg, bd = bd, relief = relief)
+
         "Problem setting frame"
-        self.button_frame = Frame(self)
-        self.build_button_frame()
-        self.button_frame.pack()
+        self.problem_setting_frame = Frame(self, bg = self.subframes_bg, bd = bd, relief = SUNKEN)
+        self.build_problem_setting_frame(padx = padx, pady = pady, relief = RAISED)
+        self.problem_setting_frame.pack(side = "top", padx = padx, pady = pady)
 
         "Solve Button Frame"
-        self.solve_butt_frame = Frame(self)
-        self.build_solve_button_frame()
-        self.solve_butt_frame.pack(pady = 10, fill = BOTH, expand = True)
+        self.solve_butt_frame = Frame(self, bg = self.subframes_bg, bd = bd, relief = SUNKEN)
+        self.solve_butt_frame.pack(padx = padx, pady = 10, fill = "x")
+
+        self.solve_butt = Button(self.solve_butt_frame, height = 3, text = "SOLVE", bg = "red")#a changer
+        self.solve_butt.bind("<Button-1>", self.master.solve)
+        self.solve_butt.pack(padx = padx, pady = pady, fill = BOTH, expand = True)
+
+        "---Test/Demo Button"
+        self.button_test = Button(self.solve_butt_frame, bg = "green", height = 3, text = "DEMO")
+        self.button_test.bind('<Button-1>', self.test)
+        self.button_test.pack(padx = padx, pady = pady, fill = "x")
 
         "Table Frame"
         self.create_table_frame()
 
-        self.pack(side = 'left')
+        self.pack(side = 'left', padx = padx, pady = pady, fill = "y")
 
     "----------------------------------------Setting Buttons Frame--------------------"
 
-    def build_button_frame(self):
+    def build_problem_setting_frame(self, padx = 3, pady = 3, relief = RAISED):
         "Builds the frame that contains the buttons at initialization"
 
         "Goal funciton frame"
-        self.gf_frame = Frame(self.button_frame)
-        self.build_gf_frame_unfilled()
-        self.gf_frame.pack(side = "top")
+        self.gf_frame = Frame(self.problem_setting_frame, bg = self.bg, bd = self.bd, relief = relief)
+        self.build_gf_frame_unfilled(padx, pady)
+        self.gf_frame.pack(side = "top", padx = padx, pady = pady, fill = "x")
 
         "Constraints frame"
-        self.constraints_frame = Frame(self.button_frame)
-        self.build_cons_frame()
-        self.constraints_frame.pack()
+        self.constraints_frame = Frame(self.problem_setting_frame, bg = self.bg, bd = self.bd, relief = relief)
+        self.build_cons_frame(padx, pady)
+        self.constraints_frame.pack(padx = padx, pady = pady, fill= "x")
 
     "-----------------------------------------Goal Function Frame--------------------"
 
-    def build_gf_frame_unfilled(self):
-        self.button_test = Button(self.gf_frame, text = "Démo")
-        self.button_test.bind('<Button-1>', self.test)
-        self.button_test.pack(side = "top", pady = 10)
-        self.button_gf = Button(self.gf_frame, text ='Fonction objectif')
+    def build_gf_frame_unfilled(self, padx = 3, pady = 3):
+        self.button_gf = Button(self.gf_frame, text ='Fonction objectif', bg = "#b0b0dd", bd = 2, relief = RAISED)
         self.button_gf.bind('<Button-1>', self.action_button_gf)
-        self.button_gf.pack(side = "top", pady = 10)
+        self.button_gf.pack(side = "top", padx = padx, pady = pady, fill = "x")
 
     def test(self, event):
         self.add_constraint(Constraint([1, 1, 4], "<="))
@@ -65,7 +74,7 @@ class LeftFrame(Frame) :
     def build_gf_frame_filled(self):
         self.button_gf.destroy()
         self.button_test.destroy()
-        self.label_gf = Label(self.gf_frame, text = self.master.gf.__str__(), relief = GROOVE)
+        self.label_gf = Label(self.gf_frame, text = self.master.gf.__str__(), borderwidth = 5, relief = GROOVE)
         self.label_gf.pack(side = "left")
         self.button_edit_gf = Button(self.gf_frame, text = "Edit")
         self.button_edit_gf.bind("<Button-1>", self.edit_gf)
@@ -79,30 +88,34 @@ class LeftFrame(Frame) :
 
     "--------------------------------------------Constraints Frame-----------------------"
 
-    def build_cons_frame(self):
-        self.label_cons = Label(self.constraints_frame, text = "Contraintes")
-        self.label_cons.pack(side = "top")
+    def build_cons_frame(self, padx = 3, pady = 3):
+        self.label_cons = Label(self.constraints_frame, text = "Gestion des contraintes :", bg = self.subframes_bg,
+                                bd = 1, relief = SUNKEN, height = 1)
+        self.label_cons.pack(side = "top", padx = padx, pady = pady, fill = "x")
 
         self.cons_buttons_frame = Frame(self.constraints_frame)
         self.build_cons_buttons_frame()
-        self.cons_buttons_frame.pack(side = "right", padx = 2)
+        self.cons_buttons_frame.pack(side = "right", padx = padx)
 
         self.list_constraints = Listbox(self.constraints_frame, height = 5)
-        self.list_constraints.pack()
+        self.list_constraints.pack(padx = padx, pady = pady, fill = "x")
 
     def build_cons_buttons_frame(self):
 
-        self.button_add_cons = Button(self.cons_buttons_frame, text = "Add")
+        self.add_button_image = PhotoImage(file = "Images/buttonplus.png")
+        self.button_add_cons = Button(self.cons_buttons_frame, image = self.add_button_image, bg = self.bg)
         self.button_add_cons.bind('<Button-1>', self.add_button_action)
-        self.button_add_cons.pack(pady = 1, fill = BOTH, expand = True)
+        self.button_add_cons.pack(expand = True)
 
-        self.button_edit_cons = Button(self.cons_buttons_frame, text = "Edit")
+        self.edit_button_image = PhotoImage(file = "Images/buttonedit.png")
+        self.button_edit_cons = Button(self.cons_buttons_frame, image = self.edit_button_image, bg = self.bg)
         self.button_edit_cons.bind("<Button-1>", self.edit_cons)
-        self.button_edit_cons.pack(pady = 1, fill = BOTH, expand = True)
+        self.button_edit_cons.pack(fill = "x")
 
-        self.button_del_cons = Button(self.cons_buttons_frame, text = "Del")
+        self.del_button_image = PhotoImage(file = "Images/buttondel.png")
+        self.button_del_cons = Button(self.cons_buttons_frame, image = self.del_button_image, bg = self.bg)
         self.button_del_cons.bind('<Button-1>', self.del_button_action)
-        self.button_del_cons.pack(pady = 1, fill = BOTH, expand = True)
+        self.button_del_cons.pack(fill = "x")
 
     def add_button_action(self, event):
         ConstraintCreationWindow(self)
@@ -148,19 +161,12 @@ class LeftFrame(Frame) :
                 self.build_table_frame()
             self.master.graph()
 
-    "--------------------Solve Button Frame------------------------------------"
-
-    def build_solve_button_frame(self):
-        self.solve_butt = Button(self.solve_butt_frame, text = "Solve", bg = "red", width = 27)#a changer
-        self.solve_butt.bind("<Button-1>", self.master.solve)
-        self.solve_butt.pack(fill = BOTH, expand = True)
-
     "---------------------Table Frame------------------------------------------"
 
     def create_table_frame(self):
         self.table_frame = LabelFrame(self, borderwidth = 0,
                                          relief = GROOVE, text = "Tableau")
-        self.table_frame.pack()
+        self.table_frame.pack(side = "bottom")
 
     def build_table_frame(self):
         if not self.table_frame is None :

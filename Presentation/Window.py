@@ -1,6 +1,5 @@
 import matplotlib as mpl
-import tkinter as tk
-
+from tkinter import *
 from Abstraction.Constraint import Constraint
 from Abstraction.Goalfunction import GoalFunction
 from Abstraction.Solver import Solver
@@ -13,21 +12,26 @@ from Presentation.LeftFrame import LeftFrame
 mpl.use("TkAgg")
 
 
-class Window(tk.Tk):
+class Window(Tk):
     def __init__(self):
         """Builds the whole window with two main Frames, the left one contains buttons and the let one contains the graph"""
-        tk.Tk.__init__(self)
+        Tk.__init__(self)
 
+        self.bg_color = "#909090"
+        self.padx = 3
+        self.pady = 3
+
+        self.configure(bg = self.bg_color)
         self.title("PySThon")
         self.gf = None
         self.constraints = []
 
         "Creating right frame"
-        self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
-        self.right_frame.pack(side = 'right')
+        self.right_frame = GraphFrame(self, None, bg = self.bg_color) #pas de controleur pour l'instant
+        self.right_frame.pack(side = 'right', padx = self.padx, pady = self.pady)
 
         "Creating left frame"
-        self.left_frame = LeftFrame(self)
+        self.left_frame = LeftFrame(self, bg = self.bg_color, bd = 1, relief = RIDGE, padx = self.padx, pady = self.pady)
 
         self.mainloop()
 
@@ -54,4 +58,4 @@ class Window(tk.Tk):
     def graph(self):
         self.right_frame.destroy()
         self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
-        self.right_frame.pack(side='right')
+        self.right_frame.pack(side = 'right')
