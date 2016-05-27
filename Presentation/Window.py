@@ -39,12 +39,10 @@ class Window(Tk):
         self.gf = gf
         self.left_frame.build_gf_frame_filled()
 
-
-    "--------------Right Frame-------------------------------------------------"
     "---------------------------Graph Display----------------------------------"
 
-    def solve(self, event):
-        self.graph()
+    def solve_button_action(self, event):
+        self.display_graph()
         tab = []
         for e in self.constraints :
             tab.append(e.normalize())
@@ -55,7 +53,7 @@ class Window(Tk):
 
 
 
-    def graph(self):
+    def display_graph(self):
         self.right_frame.destroy()
         self.right_frame = GraphFrame(self, None) #pas de controleur pour l'instant
         self.right_frame.pack(side = 'right')

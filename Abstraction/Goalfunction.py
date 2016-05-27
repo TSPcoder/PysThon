@@ -26,7 +26,7 @@ class GoalFunction:
         op = "min"
         if not self.minOrMax :
             op = "max"
-        return "Goal Function :      {} ({}*x1 + {}*x2)      ".format(op, self.coFunction[0], self.coFunction[1])
+        return " Goal Function :      {} ({}*x1 + {}*x2) ".format(op, self.coFunction[0], self.coFunction[1])
 
     # e.g , with the example above , normalize returns [3,4,5,True]
     def normalize(self):

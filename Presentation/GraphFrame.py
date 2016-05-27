@@ -27,8 +27,10 @@ class GraphFrame(Frame):
                 a.plot([coefs[2]/coefs[0], coefs[2]/coefs[0]], [0,ymax])
 
         #a.plot([1, 2, 3, 4])
+        frame = Frame(self, bg = bg, bd = bd, relief = SUNKEN)
+        frame.pack(padx = padx, pady = pady)
 
-        canvas = FigureCanvasTkAgg (f, self)
+        canvas = FigureCanvasTkAgg (f, frame)
         canvas.show()
         canvas.get_tk_widget().pack(padx = pady, pady = pady)
 '''
