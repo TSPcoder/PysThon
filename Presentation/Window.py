@@ -37,7 +37,6 @@ class Window(Tk):
 
     def set_gf(self, gf):
         self.gf = gf
-        self.left_frame.build_gf_frame_filled()
 
     "---------------------------Graph Display----------------------------------"
 

@@ -1,5 +1,4 @@
 from tkinter import *
-
 from Abstraction.Constraint import Constraint
 from Abstraction.Goalfunction import GoalFunction
 from Presentation.ConstraintCreationWindow import ConstraintCreationWindow
@@ -19,12 +18,14 @@ class LeftFrame(Frame) :
         self.del_button_image = PhotoImage(file = "Images/buttondel.png")
         self.edit_button_image = PhotoImage(file = "Images/buttonedit.png")
 
+
         Frame.__init__(self, master, bg = self.bg, bd = bd, relief = relief)
+        self.pack(side = 'left', padx = padx, pady = pady, fill = "y")
 
         "Problem setting frame"
         self.problem_setting_frame = Frame(self, bg = self.subframes_bg, bd = bd, relief = SUNKEN)
-        self.build_problem_setting_frame(padx = padx, pady = pady, relief = RAISED)
         self.problem_setting_frame.pack(side = "top", padx = padx, pady = pady)
+        self.build_problem_setting_frame(padx = padx, pady = pady, relief = RAISED)
 
         "Solve Button Frame"
         self.solve_butt_frame = Frame(self, bg = self.subframes_bg, bd = bd, relief = SUNKEN)
@@ -41,8 +42,6 @@ class LeftFrame(Frame) :
 
         "Table Frame"
         self.create_table_frame()
-
-        self.pack(side = 'left', padx = padx, pady = pady, fill = "y")
 
     "----------------------------------------Setting Buttons Frame--------------------"
 
@@ -71,9 +70,10 @@ class LeftFrame(Frame) :
         self.add_constraint(Constraint([1, 0, 3], "<="))
         self.add_constraint(Constraint([0, 1, 2], "<="))
         self.master.set_gf(GoalFunction([300, 100, 0], True))
+        self.build_gf_frame_filled()
 
     def action_button_gf(self, event):
-        FunctionCreationWindow(self)
+        FunctionCreationWindow(self.master, bg = self.bg, bd = self.bd)
 
     def build_gf_frame_filled(self):
         self.button_gf.destroy()
@@ -86,6 +86,7 @@ class LeftFrame(Frame) :
         self.build_table_frame()
 
     def edit_gf(self, event):
+        self.master.gf = None
         self.label_gf.destroy()
         self.button_edit_gf.destroy()
         self.build_gf_frame_unfilled()
@@ -98,8 +99,9 @@ class LeftFrame(Frame) :
         self.label_cons.pack(side = "top", padx = padx, pady = pady, fill = "x")
 
         self.cons_buttons_frame = Frame(self.constraints_frame)
-        self.build_cons_buttons_frame()
         self.cons_buttons_frame.pack(side = "right", padx = padx, pady = pady)
+        self.build_cons_buttons_frame()
+
 
         self.list_constraints = Listbox(self.constraints_frame, height = 5)
         self.list_constraints.pack(padx = padx, pady = pady, fill = BOTH)
@@ -119,7 +121,7 @@ class LeftFrame(Frame) :
         self.button_del_cons.pack()
 
     def add_button_action(self, event):
-        ConstraintCreationWindow(self)
+        ConstraintCreationWindow(self, bg = self.bg, bd = self.bd)
 
     def add_constraint(self, constraint):
         cons = self.master.constraints
@@ -200,7 +202,7 @@ class LeftFrame(Frame) :
             if not self.master.gf == None :
                 for column in range(3 + nb_cons):
                     s = "0"
-                    a, b, c, = self.master.gf.coFunction
+                    a, b, c, = self.master.gf.coefs_function
                     if column == 0 :
                         s = str(a)
                     elif column == 1 :

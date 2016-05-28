@@ -16,9 +16,9 @@ class GoalFunction:
 
 
     # CONSTRUCTOR
-    def __init__(self, myCoeffs=[0,0,0], myMinOrMax=True):
-        self.coFunction=myCoeffs
-        self.minOrMax=myMinOrMax
+    def __init__(self, coefs = [0, 0, 0], myMinOrMax = True):
+        self.coefs_function = coefs
+        self.minOrMax = myMinOrMax
 
 
     def __str__(self):
@@ -26,12 +26,12 @@ class GoalFunction:
         op = "min"
         if not self.minOrMax :
             op = "max"
-        return " Goal Function :      {} ({}*x1 + {}*x2) ".format(op, self.coFunction[0], self.coFunction[1])
+        return " Goal Function :      {} ({}*x1 + {}*x2 + {}) ".format(op, self.coefs_function[0], self.coefs_function[1], self.coefs_function[2])
 
     # e.g , with the example above , normalize returns [3,4,5,True]
     def normalize(self):
         output = []
-        temp = self.coFunction
+        temp = self.coefs_function
         if self.minOrMax:
             for elt in temp:
                 output.append(elt)

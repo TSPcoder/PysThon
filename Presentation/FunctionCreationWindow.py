@@ -6,46 +6,65 @@ from tkinter.messagebox import *
 
 #Creation of our window
 
-class FunctionCreationWindow:
 
-    def __init__(self, win):
-        self.window = Tk()
+class FunctionCreationWindow(Tk):
+    def __init__(self, win, bg = "#909090", bd = 1):
+
         self.win = win
+        self.check_button_image = PhotoImage(file = "Images/buttoncheck.png")
+        self.del_button_image = PhotoImage(file = "Images/buttondel.png")
 
-        Label(self.window, text = 'Fonction objectif').grid(row =1, column =1, columnspan =2, padx =10, pady =5)
+        Tk.__init__(self)
+        self.configure(bg = bg)
 
-        Label(self.window, text = 'Coéficient de x1 :').grid(row =2, column =1, padx =10, pady =5,stick = E)
+        self.frame = Frame(self, bg = "#a0a0a0", bd = bd, relief = SUNKEN)
+        self.frame.pack(fill = "x", padx = 3, pady = 3)
+        Label(self.frame, text = 'Fonction objectif : ', bg = "#a0a0a0", bd = bd, relief = SUNKEN).\
+            pack(side = "top", padx = 3, pady = 3, fill = "x")
+        self.middle_frame = Frame(self.frame, bg = bg)
+        self.middle_frame.pack()
+        self.label_frame = Frame(self.middle_frame, bg = bg, bd = bd, relief = RAISED)
+        self.label_frame.pack(side = "left", fill = "y", padx = 3, pady = 3)
+        self.entry_frame = Frame(self.middle_frame, bg = bg, bd = bd, relief = RAISED)
+        self.entry_frame.pack(side = "right", fill = "y", padx = 3, pady = 3)
+        self.button_frame = Frame(self.frame, bg = bg, bd = bd, relief = RAISED)
+        self.button_frame.pack(side = "bottom", padx = 3, pady = 3)
+
+        Label(self.label_frame, text = 'Coéficient de x1 :', bg = "#a0a0a0", bd = bd, relief = SUNKEN).pack(padx = 3, pady = 3)
         coef1 = StringVar()
         coef1.set("")
-        self.c1 = Entry(self.window, textvariable=coef1,width=10)
-        self.c1.grid(row =2, column =2, padx =10, pady =5)
+        self.c1 = Entry(self.entry_frame, bd = bd, relief = SUNKEN, textvariable=coef1,width=10)
+        self.c1.pack(padx = 3, pady = 3)
 
-        Label(self.window, text = 'Coéficient de x2 :').grid(row =3, column =1, padx =10, pady =5,stick = E)
+        Label(self.label_frame, text = 'Coéficient de x2 :', bg = "#a0a0a0", bd = bd, relief = SUNKEN).pack(padx = 3, pady = 3)
         coef2 = StringVar()
         coef2.set("")
-        self.c2 = Entry(self.window, textvariable=coef2,width=10)
-        self.c2.grid(row =3, column =2, padx =10, pady =5)
+        self.c2 = Entry(self.entry_frame, textvariable = coef2,width=10)
+        self.c2.pack(padx = 3, pady = 3)
 
-        Label(self.window, text = 'Opérateur :').grid(row = 4, column = 1, padx = 10, pady = 5, stick = E)
-        operator = StringVar()
-        operator.set("")
-        self.op = Entry(self.window, textvariable=operator,width=10)
-        self.op.grid(row =4, column =2, padx =10, pady =5)
 
-        Label(self.window, text = 'Constante :').grid(row =5, column =1, padx =10, pady =5,stick = E)
+        Label(self.label_frame, text = 'Constante :', bg = "#a0a0a0", bd = bd, relief = SUNKEN).pack(padx = 3, pady = 3, fill = "x")
         constant = StringVar()
         constant.set("")
-        self.cst = Entry(self.window, textvariable=constant,width=10)
-        self.cst.grid(row =5, column =2, padx =10, pady =5)
+        self.cst = Entry(self.entry_frame, textvariable = constant,width=10)
+        self.cst.pack(padx = 3, pady = 3)
 
-        v = Button(self.window, text ='Valider')
-        v.grid(row =6, column =1, padx =10, pady =5)
-        v.bind('<Button-1>', self.validate)
-        v.bind('<Return>', self.validate)
+        Label(self.label_frame, text = 'Opérateur :', bg = "#a0a0a0", bd = bd, relief = SUNKEN).pack(padx = 3, pady = 3, fill = "x")
+        operator = StringVar()
+        operator.set("")
+        self.op = Entry(self.entry_frame, textvariable = operator, width=10)
+        self.op.pack(padx = 3, pady = 3)
 
-        Button(self.window, text ='Annuler', command=self.window.destroy).grid(row =6, column =2, padx =10, pady =5)
+        self.v_button = Button(self.button_frame, image = self.check_button_image, bg = "#a0a0a0")
+        self.v_button.pack(side = "left", padx = 3, pady = 3)
+        self.v_button.bind('<Button-1>', self.validate)
+        self.v_button.bind('<Return>', self.validate)
+
+        self.x_button = Button(self.button_frame, image = self.del_button_image, bg = "#a0a0a0",
+               command = self.window.destroy)
+        self.x_button.pack(side = "right", padx = 3, pady = 3)
         # Tkinter loop
-        self.window.mainloop()
+        self.mainloop()
 
     def str_to_int(self, a):
         try:
@@ -83,5 +102,5 @@ class FunctionCreationWindow:
             gf = GoalFunction([self.str_to_int(self.c1.get()), self.str_to_float(self.c2.get()), self.str_to_float(self.cst.get())],
                               self.op.get())
             self.win.set_gf(gf)
-            self.win.build_gf_frame_filled()
+            self.win.left_frame.build_gf_frame_filled()
             self.window.destroy()

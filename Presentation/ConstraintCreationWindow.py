@@ -5,12 +5,23 @@ from tkinter import *
 
 
 class ConstraintCreationWindow:
-    def __init__(self, win):
+    def __init__(self, win, bg = "#909090", bd = 1):
         self.window = Tk()
         self.win = win
         self.ops = ['<=', '=', '>=']
 
-        Label(self.window, text='Nouvelle Contrainte').grid(row = 1, column = 1, columnspan = 2, padx = 10, pady = 5)
+        self.frame = Frame(self.window, bg = "#a0a0a0", bd = bd, relief = SUNKEN)
+        self.frame.pack(fill = "x", padx = 3, pady = 3)
+        Label(self.frame, text = 'Nouvelle Contrainte', bg = "#a0a0a0", bd = bd, relief = SUNKEN).\
+            pack(side = "top", padx = 3, pady = 3, fill = "x")
+        self.middle_frame = Frame(self.frame, bg = bg)
+        self.middle_frame.pack()
+        self.label_frame = Frame(self.middle_frame, bg = bg, bd = bd, relief = RAISED)
+        self.label_frame.pack(side = "left", fill = "y", padx = 3, pady = 3)
+        self.entry_frame = Frame(self.middle_frame, bg = bg, bd = bd, relief = RAISED)
+        self.entry_frame.pack(side = "right", fill = "y", padx = 3, pady = 3)
+        self.button_frame = Frame(self.frame, bg = bg, bd = bd, relief = RAISED)
+        self.button_frame.pack(side = "bottom", padx = 3, pady = 3)
 
         Label(self.window, text='Coefficient de x1').grid(row = 3, column = 1, padx = 10, pady = 5, stick = E)
         coef1 = StringVar()
