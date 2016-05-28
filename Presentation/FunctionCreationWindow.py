@@ -42,7 +42,6 @@ class FunctionCreationWindow(Tk):
         self.c2 = Entry(self.entry_frame, textvariable = coef2,width=10)
         self.c2.pack(padx = 3, pady = 3)
 
-
         Label(self.label_frame, text = 'Constante :', bg = "#a0a0a0", bd = bd, relief = SUNKEN).pack(padx = 3, pady = 3, fill = "x")
         constant = StringVar()
         constant.set("")
@@ -54,17 +53,19 @@ class FunctionCreationWindow(Tk):
         operator.set("")
         self.op = Entry(self.entry_frame, textvariable = operator, width=10)
         self.op.pack(padx = 3, pady = 3)
+        self.build_buttons()
+        self.mainloop()
 
-        self.v_button = Button(self.button_frame, image = self.check_button_image, bg = "#a0a0a0")
+    def build_buttons(self):
+        self.v_button = Button(self.button_frame, text = "Ajouter", bg = "#a0a0a0")
         self.v_button.pack(side = "left", padx = 3, pady = 3)
         self.v_button.bind('<Button-1>', self.validate)
         self.v_button.bind('<Return>', self.validate)
 
-        self.x_button = Button(self.button_frame, image = self.del_button_image, bg = "#a0a0a0",
-               command = self.window.destroy)
+        self.x_button = Button(self.button_frame, text = "Annuler", bg = "#a0a0a0",
+               command = self.destroy)
         self.x_button.pack(side = "right", padx = 3, pady = 3)
         # Tkinter loop
-        self.mainloop()
 
     def str_to_int(self, a):
         try:
@@ -103,4 +104,4 @@ class FunctionCreationWindow(Tk):
                               self.op.get())
             self.win.set_gf(gf)
             self.win.left_frame.build_gf_frame_filled()
-            self.window.destroy()
+            self.destroy()

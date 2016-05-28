@@ -121,13 +121,13 @@ class LeftFrame(Frame) :
         self.button_del_cons.pack()
 
     def add_button_action(self, event):
-        ConstraintCreationWindow(self, bg = self.bg, bd = self.bd)
+        ConstraintCreationWindow(self.master, bg = self.bg, bd = self.bd)
 
     def add_constraint(self, constraint):
         cons = self.master.constraints
         cons_listbox = self.list_constraints
         n = len(cons) + 1
-        cons_listbox.insert(n, constraint.toString())
+        cons_listbox.insert(n, constraint.__repr__())
         if constraint.operatorConstraint == '=':
             constraint1 = Constraint(constraint.coeffsConstraint, '<=').normalize()
             constraint2 = Constraint(constraint.coeffsConstraint, '>=').normalize()
@@ -149,6 +149,9 @@ class LeftFrame(Frame) :
             self.list_constraints.delete(ind)
             self.master.constraints.pop(ind)
             ConstraintCreationWindow(self)
+            self.build_table_frame()
+            self.table_frame.pack()
+            self.master.display_graph()
 
     def del_button_action(self, event):
         cons = self.master.constraints

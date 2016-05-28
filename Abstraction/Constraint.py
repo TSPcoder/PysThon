@@ -9,7 +9,7 @@ class Constraint :
         self.coeffsConstraint = myCoeffs
         self.operatorConstraint = myOperator
 
-    def toString(self):
+    def __repr__(self):
         return "{}*x1 + {}*x2 {} {}".format(self.coeffsConstraint[0], self.coeffsConstraint[1],
                                             self.operatorConstraint, self.coeffsConstraint[2])
 
