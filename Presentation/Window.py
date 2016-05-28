@@ -1,15 +1,9 @@
-import matplotlib as mpl
 from tkinter import *
 from Abstraction.Constraint import Constraint
-from Abstraction.Goalfunction import GoalFunction
 from Abstraction.Solver import Solver
-from Abstraction.TableFinale import TableFinale
-from Presentation.ConstraintCreationWindow import ConstraintCreationWindow
-from Presentation.FunctionCreationWindow import FunctionCreationWindow
+from Abstraction.Table import Table
 from Presentation.GraphFrame import GraphFrame
 from Presentation.LeftFrame import LeftFrame
-
-mpl.use("TkAgg")
 
 
 class Window(Tk):
@@ -45,7 +39,7 @@ class Window(Tk):
         tab = []
         for e in self.constraints :
             tab.append(e.normalize())
-        self.table = TableFinale(tab, self.gf.normalize())
+        self.table = Table(tab, self.gf.normalize())
         self.solver = Solver(self.table)
         self.solver.solve()
         self.left_frame.update_table()

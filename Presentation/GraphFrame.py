@@ -18,9 +18,9 @@ class GraphFrame(Frame):
                 ymax = table[2]
         a.axis([0, xmax, 0, ymax], )
         for c in parent.constraints:
-            coefs = c.coeffsConstraint
+            coefs = c.coeffs
             if coefs[0] != 0 and coefs[1] != 0:
-                a.plot([0, 1], [coefs[2]/coefs[1], coefs[2]/coefs[1] - coefs[0]/coefs[1]])
+                a.plot([0, xmax], [coefs[2]/coefs[1], coefs[2]/coefs[1] - coefs[0]/coefs[1]*xmax])
             elif coefs[0] == 0 and coefs[1] != 0:
                 a.plot([0, xmax],[coefs[2]/coefs[1], coefs[2]/coefs[1]])
             elif coefs[0] != 0 and coefs[1] == 0:
@@ -33,25 +33,3 @@ class GraphFrame(Frame):
         canvas = FigureCanvasTkAgg (f, frame)
         canvas.show()
         canvas.get_tk_widget().pack(padx = pady, pady = pady)
-'''
-    def draw_figure(self, figure):
-        xmax = 0
-        ymax = 0
-        for c in self.constraints:
-            print(type(c))
-            table = c.intersection()
-            if table[1]>xmax:
-                xmax = table[1]
-            if table[2]>ymax:
-                ymax = table[2]
-        plt.axis([0,xmax, 0, ymax])
-        for c in self.constraints:
-            coefs = c.coeffsConstraint
-            if coefs[0] != 0 and coefs[1] != 0:
-                plt.plot([0, xmax], [ymax, 0])
-            elif coefs[0] == 0 and coefs[1] != 0:
-                plt.plot([0, xmax],[coefs[2]/coefs[1], coefs[2]/coefs[1]])
-            elif coefs[0] != 0 and coefs[1] == 0:
-                plt.plot([coefs[2]/coefs[0],coefs[2]/coefs[0]], [0,ymax])
-        plt.show()
-        '''

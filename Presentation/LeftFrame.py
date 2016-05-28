@@ -128,9 +128,9 @@ class LeftFrame(Frame) :
         cons_listbox = self.list_constraints
         n = len(cons) + 1
         cons_listbox.insert(n, constraint.__repr__())
-        if constraint.operatorConstraint == '=':
-            constraint1 = Constraint(constraint.coeffsConstraint, '<=').normalize()
-            constraint2 = Constraint(constraint.coeffsConstraint, '>=').normalize()
+        if constraint.operator == '=':
+            constraint1 = Constraint(constraint.coeffs, '<=').normalize()
+            constraint2 = Constraint(constraint.coeffs, '>=').normalize()
             cons.append(constraint1)
             cons.append(constraint2)
         else:
@@ -161,7 +161,7 @@ class LeftFrame(Frame) :
             list_cons.delete(ind)
             cons.pop(ind)
             if len(cons) == 0 :
-                self.table_frame.destroy()
+                self.bottom_frame.destroy()
                 self.create_table_frame()
             else :
                 self.build_table_frame()
@@ -188,7 +188,7 @@ class LeftFrame(Frame) :
             self.create_table_frame()
             line = 0
             for cons in constraints :
-                a, b, c, = cons.coeffsConstraint
+                a, b, c, = cons.coeffs
                 for column in range(3 + nb_cons):
                     s = "0"
                     if column == 0 :
@@ -205,7 +205,7 @@ class LeftFrame(Frame) :
             if not self.master.gf == None :
                 for column in range(3 + nb_cons):
                     s = "0"
-                    a, b, c, = self.master.gf.coefs_function
+                    a, b, c, = self.master.gf.coeffs
                     if column == 0 :
                         s = str(a)
                     elif column == 1 :

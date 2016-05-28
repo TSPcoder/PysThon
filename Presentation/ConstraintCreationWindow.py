@@ -1,4 +1,3 @@
-from Abstraction.Constraint import *
 from Presentation.Window import *
 from tkinter.messagebox import *
 from tkinter import *

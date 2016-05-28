@@ -8,7 +8,7 @@ class Solver:
         """
         self.tab = table
 
-    def printTable(self):
+    def print_table(self):
         print(' '),
         for i in range(len(self.tab[1])):
             print(i),
@@ -30,50 +30,35 @@ class Solver:
         if temp:
             self.simplex()
         else:
-            newTab = self.tab.copy()
-            newTab.normalize_deux_phases()
-
-
-
+            new_tab = self.tab.copy()
+            new_tab.normalize_deux_phases()
 
     def simplex(self):
-
-        tabChang = []
-
+        tab_chang = []
         comptdep = 0
-        for i in range(self.tab.size()-1):
-            if self.tab[i][len(self.tab[i])-1] == False :
-                comptdep = comptdep+1
-
-
-           # self.tab.normalize()
-
+        for i in range(self.tab.size() - 1):
+            if not self.tab[i][len(self.tab[i])-1] :
+                comptdep += 1
+            # self.tab.normalize()
         #self.tab.normalizeGen()
-
-
 
         self.tab.normalize()
         n = self.tab.size()
-        checkValues = []
-        while not self.tab.allNeg():
-
+        check_values = []
+        while not self.tab.all_neg():
             # step 1 : check the last row (on prend le premier)
             # toCheck,j = self.tab[n-1],0
             #if toCheck[0] < toCheck[1]:
             #   j= 1
 
-            m=len(self.tab[0])
-            n=self.tab.size()
-            j=0
-            max=-1000000
+            m = len(self.tab[0])
+            n = self.tab.size()
+            j = 0
+            max = -1000000
             for i in range (m-1):
-                if self.tab[n-1][i]>max :
-                    max=self.tab[n-1][i]
-                    j=i
-
-
-
-
+                if self.tab[n-1][i] > max :
+                    max = self.tab[n-1][i]
+                    j = i
 
             # step 2 : pivot choice
             temp= []
@@ -88,8 +73,8 @@ class Solver:
                 if elt < min :
                     min = elt
             index = temp.index(min)
-            checkValues.append(j)
-            checkValues.append(index)
+            check_values.append(j)
+            check_values.append(index)
 
             # step 3 : pivot
             temp2 = self.tab
@@ -104,85 +89,69 @@ class Solver:
             nlp = []
             for elt in lp :
                 nlp.append(elt/co)
-            self.tab[index]=nlp
+            self.tab[index] = nlp
 
-            tabChang.append([index, j])
+            tab_chang.append([index, j])
 
-        self.printTable()
+        self.print_table()
         print(self.tab)
 
         """
-
         # display solutions
 
 
-        if len(checkValues) == 2 :
-            if checkValues[0] == 0 :
-                print("x1 = ",self.tab[checkValues[1]][p-1])
+        if len(check_values) == 2 :
+            if check_values[0] == 0 :
+                print("x1 = ",self.tab[check_values[1]][p-1])
                 print("x2 = 0 ")
-            elif checkValues[0] == 1:
+            elif check_values[0] == 1:
                 print("x1 = 0 ")
-                print("x2 = ",self.tab[checkValues[1]][p-1])
+                print("x2 = ",self.tab[check_values[1]][p-1])
         else:
-            if checkValues[0] == 0 :
-                print("x1 = ",self.tab[checkValues[1]][p-1])
-                print("x2 = ",self.tab[checkValues[3]][p-1])
-            elif checkValues[0] == 1 :
-                print("x1 = ",self.tab[checkValues[3][p-1]])
-                print("x2 = ",self.tab[checkValues[1][p-1]])
+            if check_values[0] == 0 :
+                print("x1 = ",self.tab[check_values[1]][p-1])
+                print("x2 = ",self.tab[check_values[3]][p-1])
+            elif check_values[0] == 1 :
+                print("x1 = ",self.tab[check_values[3][p-1]])
+                print("x2 = ",self.tab[check_values[1][p-1]])
 
         print("The max value is : ",-self.tab[n-1][p-1])
         return -self.tab[n-1][p-2]
         """
 
-
-    def deuxPhases(self):
-
+    def deux_phases(self):
         n = self.tab.size()
-        goalf = self.tab[n-1].copy()
-
-
+        goal_func = self.tab[n-1].copy()
         comptdep = 0
         for i in range(self.tab.size() - 1):
-            if self.tab[i][len(self.tab[i]) - 1] == False:
-                comptdep = comptdep + 1
-
-        self.tab.normalizeGen()
-
+            l = self.tab[i]
+            if not l [len(l) - 1]:
+                comptdep += 1
+        self.tab.normalize_gen()
         tabChang = self.simplex()
 
-
-
-
-
-        n=self.tab.size()
+        n = self.tab.size()
         for i in range (comptdep) :
             for j in range (n) :
                 m = len(self.tab[j])
                 del self.tab[j][m-2]
 
-
-
-        tabPos = []
-        tabPos.append(-1)
-        tabPos.append(-1)
+        tab_pos = []
+        tab_pos.append(-1)
+        tab_pos.append(-1)
 
         for i in range (len(tabChang)) :
-            tabPos[tabChang[i][0]] = tabChang[i][1]
+            tab_pos[tabChang[i][0]] = tabChang[i][1]
 
         ck = []
-        n=self.tab.size()
-        m=len(self.tab[0])
+        n = self.tab.size()
+        m = len(self.tab[0])
         for i in range(n-1):
             ck.append(0)
 
-        for i in range (len(tabPos)) :
-            if i>=0 :
-                ck[tabPos[i]] = goalf[i]
-
-
-
-
+        for i in range (len(tab_pos)) :
+            if i >= 0 :
+                ck[tab_pos[i]] = goal_func[i]
 
         for c in range (m):
             somme = 0
@@ -194,7 +163,6 @@ class Solver:
         self.tab[n - 1][1] = 0
 
         self.simplex()
-
 
     def solve(self):
         return self.simplex()
